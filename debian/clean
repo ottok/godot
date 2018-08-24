@@ -1,0 +1,16 @@
+core/global_defaults.cpp
+core/script_encryption_key.cpp
+core/version_generated.h
+drivers/unix/os_unix_global_settings_path.cpp
+editor/register_exporters.cpp
+modules/register_module_types.cpp
+platform/android/logo.h
+platform/bb10/logo.h
+platform/haiku/logo.h
+platform/iphone/logo.h
+platform/javascript/logo.h
+platform/osx/logo.h
+platform/server/logo.h
+platform/windows/logo.h
+platform/winrt/logo.h
+platform/x11/logo.h

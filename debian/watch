@@ -1,0 +1,4 @@
+version=3
+
+opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/godot-$1\.tar\.gz/ \
+  https://github.com/godotengine/godot/tags .*/v?(\d\S*)\.tar\.gz

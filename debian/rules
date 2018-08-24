@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+export DH_VERBOSE = 1
+NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+override_dh_clean:
+	dh_clean
+	scons -c
+	find . -iname "*.gen.cpp" -delete
+	find . -iname "*.gen.h" -delete
+	find . -iname "*.pyc" -delete
+	find . -iname ".a" -delete
+	find . -iname ".o" -delete
+	find . -iname ".sconsign.dblite" -delete
+	rm -rf bin/
+
+include /usr/share/dpkg/architecture.mk  # provides DEB_HOST_ARCH_BITS
+
+SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
+	builtin_freetype=no \
+	builtin_glew=no \
+	builtin_libogg=no \
+	builtin_libpng=no \
+	builtin_libtheora=no \
+	builtin_libvorbis=no \
+	builtin_libwebp=no \
+	builtin_openssl=no \
+	builtin_opus=no \
+	builtin_zlib=no \
+	use_llvm=no
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	dh_auto_build
+	scons platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
+	scons platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
+	scons platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
+
+override_dh_auto_install:
+	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.tools.64.llvm           $(CURDIR)/debian/godot3/usr/bin/godot3
+	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.64.llvm                 $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
+	install -D -m 400 $(CURDIR)/bin/godot_server.server.opt.tools.64.llvm $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
+	dh_auto_install

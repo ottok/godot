@@ -1,0 +1,8 @@
+add-openssl-1.1-support
+add-upstream-man-page
+change-ca-cert-source-path
+fix-lintian-signalled-spelling-errors
+fix-typo-in-code-editor
+remove-thirdparty-ca-certificates
+remove-unneeded-thirdparty-libraries
+series
