@@ -1,12 +1,7 @@
 Description: Change CA Certificates path
  Use the system path instead of packaged thirdparty ca-certificates.
- .
- godot (2.1.4-stable-1) UNRELEASED; urgency=medium
- .
-   * Initial release (Closes: #793057)
-   * This is my first package
+
 Author: Kienan Stewart <kienan.stewart@burntworld.ca>
-Bug-Debian: https://bugs.debian.org/793057
 
 ---
 The information above should follow the Patch Tagging Guidelines, please

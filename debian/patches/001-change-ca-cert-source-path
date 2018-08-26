@@ -1,0 +1,18 @@
+From: Federico Ceratto <federico@debian.org>
+Date: Sun, 26 Aug 2018 19:03:38 +0000
+Subject: Use SSL certificates from /etc/ssl/certs
+Forwarded: no
+
+--- a/editor/SCsub
++++ b/editor/SCsub
+@@ -435,8 +435,8 @@
+     env.Depends("#editor/doc_data_compressed.gen.h", docs)
+     env.CommandNoCache("#editor/doc_data_compressed.gen.h", docs, make_doc_header)
+     # Certificates
+-    env.Depends("#editor/certs_compressed.gen.h", "#thirdparty/certs/ca-certificates.crt")
+-    env.CommandNoCache("#editor/certs_compressed.gen.h", "#thirdparty/certs/ca-certificates.crt", make_certs_header)
++    env.Depends("#editor/certs_compressed.gen.h", "/etc/ssl/certs/ca-certificates.crt")
++    env.CommandNoCache("#editor/certs_compressed.gen.h", "/etc/ssl/certs/ca-certificates.crt", make_certs_header)
+ 
+     import glob
+     path = env.Dir('.').abspath
