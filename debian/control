@@ -40,24 +40,7 @@ Vcs-Browser: https://salsa.debian.org/debian/godot3
 Package: godot3
 Architecture: amd64 arm64 armel armhf i386
 Depends: ${shlibs:Depends},
- ${misc:Depends},
- libasound2,
- libfreetype6,
- libgcc1,
- libgl1-mesa-glx,
- libopus0,
- libopusfile0,
- libpng16-16,
- libpulse0,
- libtheora0,
- libvorbis0a,
- libvpx4,
- libwebp6,
- libx11-6,
- libxcursor1,
- libxinerama1,
- libxrandr2,
- zlib1g
+ ${misc:Depends}
 Description: Full 2D and 3D game engine with editor
  Godot is an advanced, feature packed, multi-platform 2D and 3D game engine.
  It provides a huge set of common tools, so you can just focus on making
@@ -66,24 +49,7 @@ Description: Full 2D and 3D game engine with editor
 Package: godot3-runner
 Architecture: amd64 arm64 armel armhf i386
 Depends: ${shlibs:Depends},
- ${misc:Depends},
- libasound2,
- libfreetype6,
- libgcc1,
- libgl1-mesa-glx,
- libopus0,
- libopusfile0,
- libpng16-16,
- libpulse0,
- libtheora0,
- libvorbis0a,
- libvpx4,
- libwebp6,
- libx11-6,
- libxcursor1,
- libxinerama1,
- libxrandr2,
- zlib1g
+ ${misc:Depends}
 Description: Godot game engine run-time
  Godot is an advanced, feature packed, multi-platform 2D and 3D game engine.
  This package allows games to be run from source or data-pack.
@@ -91,24 +57,7 @@ Description: Godot game engine run-time
 Package: godot3-server
 Architecture: amd64 arm64 armel armhf i386
 Depends: ${shlibs:Depends},
- ${misc:Depends},
- libasound2,
- libfreetype6,
- libgcc1,
- libgl1-mesa-glx,
- libopus0,
- libopusfile0,
- libpng16-16,
- libpulse0,
- libtheora0,
- libvorbis0a,
- libvpx4,
- libwebp6,
- libx11-6,
- libxcursor1,
- libxinerama1,
- libxrandr2,
- zlib1g
+ ${misc:Depends}
 Description: Headless Godot game engine run-time
  Godot is an advanced, feature packed, multi-platform 2D and 3D game engine.
  This package provides a command-line only version of the program.

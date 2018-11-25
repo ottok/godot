@@ -1,6 +1,7 @@
 godot (3.0.6-2) UNRELEASED; urgency=medium
 
   * Switch to source format 3.0 (Closes: #914617)
+  * Remove binary dependencies, thanks  Jeremy Bicha (Closes: #914618)
 
  -- Federico Ceratto <federico@debian.org>  Sun, 25 Nov 2018 19:51:03 +0000
 
