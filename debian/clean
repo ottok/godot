@@ -14,3 +14,4 @@ platform/server/logo.h
 platform/windows/logo.h
 platform/winrt/logo.h
 platform/x11/logo.h
+platform/android/java/gradle/wrapper/gradle-wrapper.jar
