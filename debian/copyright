@@ -48,12 +48,6 @@ Comment: The Android Open Source Project
 Copyright: 2002, Google Inc.
 License: Apache-2.0
 
-Files: ./platform/bb10/bbutil.c
- ./platform/bb10/bbutil.h
-Comment: BlackBerry NDK-Samples
-Copyright: 2011-2013, Research In Motion Limited.
-License: Apache-2.0
-
 Files: ./servers/physics/gjk_epa.cpp
  ./servers/physics/joints/generic_6dof_joint_sw.cpp
  ./servers/physics/joints/generic_6dof_joint_sw.h
@@ -89,20 +83,10 @@ Comment: DroidSans font
 Copyright: 2008, The Android Open Source Project
 License: Apache-2.0
 
-Files: ./thirdparty/fonts/source_code_pro.otf
-Comment: Source Code Pro font
-Copyright: 2010, 2012, Adobe Systems Incorporated
-License: OFL-1.1
-
 Files: ./thirdparty/jpeg-compressor/*
 Comment: jpeg-compressor
 Copyright: 2012, Rich Geldreich
 License: public-domain
-
-Files: ./thirdparty/libmpcdec/*
-Comment: Musepack
-Copyright: 2005, The Musepack Development Team
-License: BSD-3-clause
 
 Files: ./thirdparty/minizip/*
 Comment: MiniZip
@@ -182,26 +166,10 @@ Comment: PvrTcCompressor
 Copyright: 2014, Jeffrey Lim.
 License: BSD-3-clause
 
-Files: ./thirdparty/rg-etc1/*
-Comment: rg-etc1
-Copyright: 2012, Rich Geldreich
-License: Zlib
-
 Files: ./thirdparty/rtaudio/*
 Comment: RtAudio
 Copyright: 2001-2016, Gary P. Scavone
 License: Expat
-
-Files: ./thirdparty/speex/*
-Comment: Speex
-Copyright: 2002-2008, Xiph.org Foundation
-  2002-2008, Jean-Marc Valin
-  2005-2007, Analog Devices Inc.
-  2005-2008, Commonwealth Scientific and Industrial Research Organisation (CSIRO)
-  1993, 2002, 2006, David Rowe
-  2003, EpicGames
-  1992-1994, Jutta Degener, Carsten Bormann
-License: BSD-3-Clause
 
 Files: ./thirdparty/squish/*
 Comment: libSquish
