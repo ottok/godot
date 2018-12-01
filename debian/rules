@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 export DH_VERBOSE = 1
 NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+BITS = $(shell dpkg-architecture -q DEB_TARGET_ARCH_BITS)
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
@@ -61,9 +62,10 @@ override_dh_auto_build:
 	scons platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
 
 override_dh_auto_install:
-	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.tools.64           $(CURDIR)/debian/godot3/usr/bin/godot3
-	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.64                 $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
-	install -D -m 400 $(CURDIR)/bin/godot_server.server.opt.tools.64 $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
-	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.desktop        $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
+	echo "Installing binaries for $(BITS) bits architecture"
+	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.tools.$(BITS)           $(CURDIR)/debian/godot3/usr/bin/godot3
+	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.$(BITS)                 $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
+	install -D -m 400 $(CURDIR)/bin/godot_server.server.opt.tools.$(BITS) $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
+	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.desktop             $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	sed -i 's/^Exec=.*/Exec=godot3 -p/' $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	dh_auto_install
