@@ -1,6 +1,5 @@
 import methods
 import os
-import string
 import sys
 
 
@@ -17,7 +16,7 @@ def can_build():
         # building natively on windows!
         if (os.getenv("VSINSTALLDIR")):
 
-            if (os.getenv("ANGLE_SRC_PATH") == None):
+            if (os.getenv("ANGLE_SRC_PATH") is None):
                 return False
 
             return True
@@ -25,8 +24,8 @@ def can_build():
 
 
 def get_opts():
-
     return [
+        ('msvc_version', 'MSVC version to use (ignored if the VCINSTALLDIR environment variable is set)', None),
     ]
 
 
@@ -39,6 +38,8 @@ def get_flags():
 
 
 def configure(env):
+
+    env.msvc = True
 
     if (env["bits"] != "default"):
         print("Error: bits argument is disabled for MSVC")
@@ -107,7 +108,7 @@ def configure(env):
             env["bits"] = "32"
             print("Compiled program architecture will be a x86 executable. (forcing bits=32).")
         else:
-            print("Failed to detect MSVC compiler architecture version... Defaulting to 32bit executable settings (forcing bits=32). Compilation attempt will continue, but SCons can not detect for what architecture this build is compiled for. You should check your settings/compilation setup.")
+            print("Failed to detect MSVC compiler architecture version... Defaulting to 32-bit executable settings (forcing bits=32). Compilation attempt will continue, but SCons can not detect for what architecture this build is compiled for. You should check your settings/compilation setup.")
             env["bits"] = "32"
 
         if (env["bits"] == "32"):
@@ -160,6 +161,7 @@ def configure(env):
         'libANGLE',
         'libEGL',
         'libGLESv2',
+        'bcrypt',
     ]
     env.Append(LINKFLAGS=[p + ".lib" for p in LIBS])
 

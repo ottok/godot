@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)    */
+/* Copyright (c) 2007-2019 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2019 Godot Engine contributors (cf. AUTHORS.md)    */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -51,6 +51,7 @@ private:
 	AABB custom_aabb;
 
 	Ref<Material> material;
+	bool flip_faces;
 
 	mutable bool pending_request;
 	void _update() const;
@@ -84,6 +85,9 @@ public:
 
 	void set_custom_aabb(const AABB &p_custom);
 	AABB get_custom_aabb() const;
+
+	void set_flip_faces(bool p_enable);
+	bool get_flip_faces() const;
 
 	PrimitiveMesh();
 	~PrimitiveMesh();
