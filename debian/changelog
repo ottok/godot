@@ -1,3 +1,9 @@
+godot (3.1.1-stable-1) UNRELEASED; urgency=medium
+
+  * New upstream release 3.1.1-stable
+
+ -- Federico Ceratto <federico@debian.org>  Sat, 06 Jul 2019 21:14:37 +0100
+
 godot (3.0.6-2) unstable; urgency=medium
 
   * Switch to source format 3.0 (Closes: #914617)
