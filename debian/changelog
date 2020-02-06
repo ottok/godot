@@ -1,8 +1,8 @@
-godot (3.1.2-stable-1) UNRELEASED; urgency=medium
+godot (3.2-stable-1) UNRELEASED; urgency=medium
 
-  * New upstream release 3.1.2-stable
+  * New upstream release
 
- -- Federico Ceratto <federico@debian.org>  Sat, 21 Dec 2019 20:42:22 +0000
+ -- Federico Ceratto <federico@debian.org>  Thu, 06 Feb 2020 23:15:49 +0000
 
 godot (3.0.6-2) unstable; urgency=medium
 
