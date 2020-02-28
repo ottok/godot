@@ -16,6 +16,9 @@ override_dh_clean:
 	find . -iname ".a" -delete
 	find . -iname ".o" -delete
 	find . -iname ".sconsign.dblite" -delete
+	find . -name '*.o' -delete
+	rm -rf main/libmain.x11.opt.tools.64.a main/tests/libtests.x11.opt.tools.64.a
+	rm -rf config.log .sconsign4.dblite
 	rm -rf bin/
 	rm -rf enet
 	rm -rf freetype
@@ -69,3 +72,4 @@ override_dh_auto_install:
 	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.desktop  $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	sed -i 's/^Exec=.*/Exec=godot3 -p/' $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	dh_auto_install
+
