@@ -65,7 +65,7 @@ override_dh_auto_install:
 	echo "Installing binaries for $(BITS) bits architecture"
 	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.tools.$(BITS)           $(CURDIR)/debian/godot3/usr/bin/godot3
 	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.$(BITS)                 $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
-	install -D -m 400 $(CURDIR)/bin/godot_server.server.opt.tools.$(BITS) $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
-	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.desktop             $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
+	install -D -m 400 $(CURDIR)/bin/godot_server.x11.opt.tools.$(BITS) $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
+	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.desktop  $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	sed -i 's/^Exec=.*/Exec=godot3 -p/' $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	dh_auto_install
