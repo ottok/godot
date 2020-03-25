@@ -337,7 +337,7 @@ class EditorExportPlatformAndroid : public EditorExportPlatform {
 							Vector<String> props = dp.split("\n");
 							String vendor;
 							String device;
-							d.description + "Device ID: " + d.id + "\n";
+							d.description = "Device ID: " + d.id + "\n";
 							d.api_level = 0;
 							for (int j = 0; j < props.size(); j++) {
 
@@ -642,9 +642,6 @@ class EditorExportPlatformAndroid : public EditorExportPlatform {
 		String dst_path = p_path.replace_first("res://", "assets/");
 
 		store_in_apk(ed, dst_path, p_data, _should_compress_asset(p_path, p_data) ? Z_DEFLATED : 0);
-		if (ed->ep->step("File: " + p_path, 3 + p_file * 100 / p_total)) {
-			return ERR_SKIP;
-		}
 		return OK;
 	}
 
@@ -1497,7 +1494,7 @@ public:
 		String adb = EditorSettings::get_singleton()->get("export/android/adb");
 
 		// Export_temp APK.
-		if (ep.step("Exporting APK", 0)) {
+		if (ep.step("Exporting APK...", 0)) {
 			device_lock->unlock();
 			return ERR_SKIP;
 		}
@@ -1547,7 +1544,7 @@ public:
 		}
 
 		print_line("Installing to device (please wait...): " + devices[p_device].name);
-		if (ep.step("Installing to device (please wait...)", 2)) {
+		if (ep.step("Installing to device, please wait...", 2)) {
 			CLEANUP_AND_RETURN(ERR_SKIP);
 		}
 
@@ -1614,7 +1611,7 @@ public:
 			}
 		}
 
-		if (ep.step("Running on Device...", 3)) {
+		if (ep.step("Running on device...", 3)) {
 			CLEANUP_AND_RETURN(ERR_SKIP);
 		}
 		args.clear();
@@ -1857,6 +1854,7 @@ public:
 					while (!f->eof_reached()) {
 						String l = f->get_line();
 
+						bool append_line = false;
 						if (l.begins_with("//CHUNK_")) {
 							String text = l.replace_first("//CHUNK_", "");
 							int begin_pos = text.find("_BEGIN");
@@ -1888,10 +1886,14 @@ public:
 											new_file += E->get() + "\n";
 										}
 									}
-									new_file += end_marker + "\n";
+									if (f->eof_reached()) {
+										new_file += end_marker;
+									} else {
+										new_file += end_marker + "\n";
+									}
 								}
 							} else {
-								new_file += l + "\n"; //pass line by
+								append_line = true;
 							}
 						} else if (l.begins_with("//DIR_")) {
 							String text = l.replace_first("//DIR_", "");
@@ -1924,14 +1926,25 @@ public:
 											new_file += "\n";
 										}
 									}
-									new_file += end_marker + "\n";
+									if (f->eof_reached()) {
+										new_file += end_marker;
+									} else {
+										new_file += end_marker + "\n";
+									}
 								}
 							} else {
-								new_file += l + "\n"; //pass line by
+								append_line = true;
 							}
-
 						} else {
-							new_file += l + "\n";
+							append_line = true;
+						}
+
+						if (append_line) {
+							if (f->eof_reached()) {
+								new_file += l;
+							} else {
+								new_file += l + "\n";
+							}
 						}
 					}
 				}
@@ -1952,6 +1965,7 @@ public:
 					while (!f->eof_reached()) {
 						String l = f->get_line();
 
+						bool append_line = false;
 						if (l.begins_with("<!--CHUNK_")) {
 							String text = l.replace_first("<!--CHUNK_", "");
 							int begin_pos = text.find("_BEGIN-->");
@@ -1982,10 +1996,14 @@ public:
 											new_file += E->get() + "\n";
 										}
 									}
-									new_file += end_marker + "\n";
+									if (f->eof_reached()) {
+										new_file += end_marker;
+									} else {
+										new_file += end_marker + "\n";
+									}
 								}
 							} else {
-								new_file += l + "\n"; //pass line by
+								append_line = true;
 							}
 
 						} else if (l.strip_edges().begins_with("<application")) {
@@ -1993,7 +2011,7 @@ public:
 							int last_tag_pos = l.find(last_tag);
 							if (last_tag_pos == -1) {
 								ERR_PRINTS("Not adding application attributes as the expected tag was not found in '<application': " + last_tag);
-								new_file += l + "\n";
+								append_line = true;
 							} else {
 								String base = l.substr(0, last_tag_pos + last_tag.length());
 								if (manifest_sections.has("application_attribs")) {
@@ -2006,7 +2024,14 @@ public:
 								new_file += base;
 							}
 						} else {
-							new_file += l + "\n";
+							append_line = true;
+						}
+
+						if (append_line) {
+							new_file += l;
+							if (!f->eof_reached()) {
+								new_file += "\n";
+							}
 						}
 					}
 				}
@@ -2119,7 +2144,7 @@ public:
 		FileAccess *src_f = NULL;
 		zlib_filefunc_def io = zipio_create_io_from_file(&src_f);
 
-		if (ep.step("Creating APK", 0)) {
+		if (ep.step("Creating APK...", 0)) {
 			return ERR_SKIP;
 		}
 
@@ -2281,7 +2306,7 @@ public:
 			ret = unzGoToNextFile(pkg);
 		}
 
-		if (ep.step("Adding Files...", 1)) {
+		if (ep.step("Adding files...", 1)) {
 			CLEANUP_AND_RETURN(ERR_SKIP);
 		}
 		Error err = OK;
