@@ -2,7 +2,8 @@ Source: godot
 Section: devel
 Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
-Uploaders: Federico Ceratto <federico@debian.org>
+Uploaders: Federico Ceratto <federico@debian.org>,
+ Dominik George <natureshadow@debian.org>
 Build-Depends: debhelper (>= 11~),
  ca-certificates,
  libasound2-dev,
@@ -30,7 +31,7 @@ Build-Depends: debhelper (>= 11~),
  pkg-config,
  scons,
  zlib1g-dev
-Standards-Version: 4.2.1
+Standards-Version: 4.5.0
 Homepage: https://godotengine.org
 Vcs-Git: https://salsa.debian.org/debian/godot3.git
 Vcs-Browser: https://salsa.debian.org/debian/godot3

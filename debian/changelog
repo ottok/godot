@@ -5,6 +5,8 @@ godot (3.2.3-stable-1) UNRELEASED; urgency=medium
 
   [ Dominik George ]
   * New upstream release
+  * Bump Standards-Version
+    + No changes needed.
 
  -- Dominik George <natureshadow@debian.org>  Wed, 28 Oct 2020 13:23:51 +0100
 
