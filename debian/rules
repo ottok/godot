@@ -18,7 +18,7 @@ override_dh_clean:
 	find . -iname ".sconsign.dblite" -delete
 	find . -name '*.o' -delete
 	rm -rf main/libmain.x11.opt.tools.64.a main/tests/libtests.x11.opt.tools.64.a
-	rm -rf config.log .sconsign4.dblite
+	rm -rf config.log .sconsign?.dblite
 	rm -rf bin/
 	rm -rf enet
 	rm -rf freetype

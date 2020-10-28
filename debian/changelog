@@ -4,6 +4,15 @@ godot (3.2.1-stable-1) UNRELEASED; urgency=medium
 
  -- Federico Ceratto <federico@debian.org>  Wed, 25 Mar 2020 19:43:11 +0000
 
+godot (3.2-stable-2) unstable; urgency=medium
+
+  * Team upload
+  * Remove build-deps libgcc-8-dev, libstdc++-8-dev (Closes: #944168)
+  * Clean .sconsign?.dblite because .sconsign5.dblite prevents the build
+    (Closes: #954608)
+
+ -- Juhani Numminen <juhaninumminen0@gmail.com>  Wed, 25 Mar 2020 10:49:15 +0200
+
 godot (3.2-stable-1) unstable; urgency=medium
 
   * New upstream release
