@@ -11,6 +11,7 @@ godot (3.2.3-stable-1) unstable; urgency=medium
     + No changes needed
   * Install icon (Closes: #956684)
   * Add myself to Uploaders to trak package
+  * Remove some more files after scons generation in dh_clean
   * Thanks to Teckids e.V. and credativ GmbH for sponsoring the work
 
  -- Dominik George <natureshadow@debian.org>  Wed, 28 Oct 2020 13:56:05 +0100
