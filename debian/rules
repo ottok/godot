@@ -39,6 +39,7 @@ include /usr/share/dpkg/architecture.mk  # provides DEB_HOST_ARCH_BITS
 # bullet requires 2.88
 
 SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
+	system_certs_path=/etc/ssl/certs/ca-certificates.crt \
 	builtin_bullet=yes \
 	builtin_enet=no \
 	builtin_freetype=no \

@@ -5,6 +5,8 @@ godot (3.2.3-stable-1) unstable; urgency=medium
 
   [ Dominik George ]
   * New upstream release
+  * Drop ca-certs path patch
+    + Use system_certs_path build option instead
   * Bump Standards-Version
     + No changes needed
   * Install icon (Closes: #956684)
