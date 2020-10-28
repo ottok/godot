@@ -70,6 +70,7 @@ override_dh_auto_install:
 	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.$(BITS)                 $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
 	install -D -m 400 $(CURDIR)/bin/godot_server.x11.opt.tools.$(BITS) $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
 	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.desktop  $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
+	install -D -m 644 $(CURDIR)/icon.svg                                       $(CURDIR)/debian/godot3/usr/share/pixmaps/godot.svg
 	sed -i 's/^Exec=.*/Exec=godot3 -p/' $(CURDIR)/debian/godot3/usr/share/applications/godot3.desktop
 	dh_auto_install
 
