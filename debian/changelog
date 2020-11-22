@@ -1,3 +1,9 @@
+godot (3.2.3-stable-2) unstable; urgency=medium
+
+  * Build godot3-dev pacakge
+
+ -- Dominik George <natureshadow@debian.org>  Sun, 22 Nov 2020 18:36:42 +0100
+
 godot (3.2.3-stable-1) unstable; urgency=medium
 
   [ Federico Ceratto ]
