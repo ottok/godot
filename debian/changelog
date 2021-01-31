@@ -1,8 +1,12 @@
-godot (3.2.3-stable-2) UNRELEASED; urgency=medium
+godot (3.2.3-stable-2) unstable; urgency=high
 
+  [ Dominik George ]
   * Build godot3-dev package
 
- -- Dominik George <natureshadow@debian.org>  Sun, 22 Nov 2020 18:36:42 +0100
+  [ Federico Ceratto ]
+  * Set supported architectures (Closes: #978567)
+
+ -- Federico Ceratto <federico@debian.org>  Sun, 31 Jan 2021 23:54:47 +0000
 
 godot (3.2.3-stable-1) unstable; urgency=medium
 
