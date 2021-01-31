@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
 Uploaders: Federico Ceratto <federico@debian.org>,
  Dominik George <natureshadow@debian.org>
-Build-Depends: debhelper (>= 11~),
+Build-Depends: debhelper (>= 13~),
  ca-certificates,
  libasound2-dev,
  libenet-dev,
