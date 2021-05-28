@@ -1,3 +1,9 @@
+godot (3.2.3-stable-4) unstable; urgency=medium
+
+  * CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
+
+ -- Moritz Muehlenhoff <jmm@debian.org>  Fri, 28 May 2021 09:26:20 +0200
+
 godot (3.2.3-stable-3) unstable; urgency=medium
 
   * Rebuild
