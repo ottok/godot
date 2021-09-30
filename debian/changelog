@@ -9,6 +9,7 @@ godot (3.3.3-stable-1) UNRELEASED; urgency=medium
   [ Dominik George ]
   * Build godot3-dev package
   * New upstream version
+  * Bump Standards-Version (no changes needed)
 
  -- Dominik George <natureshadow@debian.org>  Thu, 30 Sep 2021 12:48:21 +0200
 
