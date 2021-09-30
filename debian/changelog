@@ -3,12 +3,10 @@ godot (3.3.3-stable-1) UNRELEASED; urgency=medium
   [ Federico Ceratto ]
   * Set supported architectures (Closes: #978567)
 
-  [ Moritz Muehlenhoff ]
-  * CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
-
   [ Dominik George ]
   * Build godot3-dev package
   * New upstream version
+    + CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
   * Bump Standards-Version (no changes needed)
 
  -- Dominik George <natureshadow@debian.org>  Thu, 30 Sep 2021 12:48:21 +0200
