@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,8 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifndef USTRING_H
-#define USTRING_H
+#ifndef USTRING_GODOT_H
+#define USTRING_GODOT_H
 
 #include "core/array.h"
 #include "core/cowdata.h"
@@ -45,14 +45,19 @@ class CharProxy {
 	CowData<T> &_cowdata;
 	static const T _null = 0;
 
-	_FORCE_INLINE_ CharProxy(const int &p_index, CowData<T> &cowdata) :
+	_FORCE_INLINE_ CharProxy(const int &p_index, CowData<T> &p_cowdata) :
 			_index(p_index),
-			_cowdata(cowdata) {}
+			_cowdata(p_cowdata) {}
 
 public:
+	_FORCE_INLINE_ CharProxy(const CharProxy<T> &p_other) :
+			_index(p_other._index),
+			_cowdata(p_other._cowdata) {}
+
 	_FORCE_INLINE_ operator T() const {
-		if (unlikely(_index == _cowdata.size()))
+		if (unlikely(_index == _cowdata.size())) {
 			return _null;
+		}
 
 		return _cowdata.get(_index);
 	}
@@ -61,17 +66,16 @@ public:
 		return _cowdata.ptr() + _index;
 	}
 
-	_FORCE_INLINE_ void operator=(const T &other) const {
-		_cowdata.set(_index, other);
+	_FORCE_INLINE_ void operator=(const T &p_other) const {
+		_cowdata.set(_index, p_other);
 	}
 
-	_FORCE_INLINE_ void operator=(const CharProxy<T> &other) const {
-		_cowdata.set(_index, other.operator T());
+	_FORCE_INLINE_ void operator=(const CharProxy<T> &p_other) const {
+		_cowdata.set(_index, p_other.operator T());
 	}
 };
 
 class CharString {
-
 	CowData<char> _cowdata;
 	static const char _null;
 
@@ -84,8 +88,9 @@ public:
 	_FORCE_INLINE_ char get(int p_index) const { return _cowdata.get(p_index); }
 	_FORCE_INLINE_ void set(int p_index, const char &p_elem) { _cowdata.set(p_index, p_elem); }
 	_FORCE_INLINE_ const char &operator[](int p_index) const {
-		if (unlikely(p_index == _cowdata.size()))
+		if (unlikely(p_index == _cowdata.size())) {
 			return _null;
+		}
 
 		return _cowdata.get(p_index);
 	}
@@ -113,18 +118,16 @@ protected:
 typedef wchar_t CharType;
 
 struct StrRange {
-
 	const CharType *c_str;
 	int len;
 
-	StrRange(const CharType *p_c_str = NULL, int p_len = 0) {
+	StrRange(const CharType *p_c_str = nullptr, int p_len = 0) {
 		c_str = p_c_str;
 		len = p_len;
 	}
 };
 
 class String {
-
 	CowData<CharType> _cowdata;
 	static const CharType _null;
 
@@ -154,8 +157,9 @@ public:
 	Error resize(int p_size) { return _cowdata.resize(p_size); }
 
 	_FORCE_INLINE_ const CharType &operator[](int p_index) const {
-		if (unlikely(p_index == _cowdata.size()))
+		if (unlikely(p_index == _cowdata.size())) {
 			return _null;
+		}
 
 		return _cowdata.get(p_index);
 	}
@@ -206,7 +210,7 @@ public:
 	int findn(const String &p_str, int p_from = 0) const; ///< return <0 if failed, case insensitive
 	int rfind(const String &p_str, int p_from = -1) const; ///< return <0 if failed
 	int rfindn(const String &p_str, int p_from = -1) const; ///< return <0 if failed, case insensitive
-	int findmk(const Vector<String> &p_keys, int p_from = 0, int *r_key = NULL) const; ///< return <0 if failed
+	int findmk(const Vector<String> &p_keys, int p_from = 0, int *r_key = nullptr) const; ///< return <0 if failed
 	bool match(const String &p_wildcard) const;
 	bool matchn(const String &p_wildcard) const;
 	bool begins_with(const String &p_string) const;
@@ -253,7 +257,7 @@ public:
 	int64_t to_int64() const;
 	static int to_int(const char *p_str, int p_len = -1);
 	static double to_double(const char *p_str);
-	static double to_double(const CharType *p_str, const CharType **r_end = NULL);
+	static double to_double(const CharType *p_str, const CharType **r_end = nullptr);
 	static int64_t to_int(const CharType *p_str, int p_len = -1);
 	String capitalize() const;
 	String camelcase_to_underscore(bool lowercase = true) const;
@@ -270,7 +274,7 @@ public:
 	Vector<int> split_ints(const String &p_splitter, bool p_allow_empty = true) const;
 	Vector<int> split_ints_mk(const Vector<String> &p_splitters, bool p_allow_empty = true) const;
 
-	String join(Vector<String> parts);
+	String join(const Vector<String> &parts) const;
 
 	static CharType char_uppercase(CharType p_char);
 	static CharType char_lowercase(CharType p_char);
@@ -282,6 +286,7 @@ public:
 
 	String left(int p_pos) const;
 	String right(int p_pos) const;
+	String indent(const String &p_prefix) const;
 	String dedent() const;
 	String strip_edges(bool left = true, bool right = true) const;
 	String strip_escapes() const;
@@ -296,7 +301,7 @@ public:
 
 	CharString ascii(bool p_allow_extended = false) const;
 	CharString utf8() const;
-	bool parse_utf8(const char *p_utf8, int p_len = -1); //return true on error
+	bool parse_utf8(const char *p_utf8, int p_len = -1, bool p_skip_cr = false); //return true on error
 	static String utf8(const char *p_utf8, int p_len = -1);
 
 	static uint32_t hash(const CharType *p_cstr, int p_len); /* hash the string */
@@ -324,6 +329,7 @@ public:
 	String get_file() const;
 	static String humanize_size(uint64_t p_size);
 	String simplify_path() const;
+	bool is_network_share_path() const;
 
 	String xml_escape(bool p_escape_quotes = false) const;
 	String xml_unescape() const;
@@ -344,6 +350,7 @@ public:
 	// node functions
 	static const String invalid_node_name_characters;
 	String validate_node_name() const;
+	String validate_identifier() const;
 
 	bool is_valid_identifier() const;
 	bool is_valid_integer() const;
@@ -381,36 +388,31 @@ String rtos(double p_val);
 String rtoss(double p_val); //scientific version
 
 struct NoCaseComparator {
-
 	bool operator()(const String &p_a, const String &p_b) const {
-
 		return p_a.nocasecmp_to(p_b) < 0;
 	}
 };
 
 struct NaturalNoCaseComparator {
-
 	bool operator()(const String &p_a, const String &p_b) const {
-
 		return p_a.naturalnocasecmp_to(p_b) < 0;
 	}
 };
 
 template <typename L, typename R>
 _FORCE_INLINE_ bool is_str_less(const L *l_ptr, const R *r_ptr) {
-
 	while (true) {
-
-		if (*l_ptr == 0 && *r_ptr == 0)
+		if (*l_ptr == 0 && *r_ptr == 0) {
 			return false;
-		else if (*l_ptr == 0)
+		} else if (*l_ptr == 0) {
 			return true;
-		else if (*r_ptr == 0)
+		} else if (*r_ptr == 0) {
 			return false;
-		else if (*l_ptr < *r_ptr)
+		} else if (*l_ptr < *r_ptr) {
 			return true;
-		else if (*l_ptr > *r_ptr)
+		} else if (*l_ptr > *r_ptr) {
 			return false;
+		}
 
 		l_ptr++;
 		r_ptr++;
@@ -419,28 +421,38 @@ _FORCE_INLINE_ bool is_str_less(const L *l_ptr, const R *r_ptr) {
 
 /* end of namespace */
 
-//tool translate
+// Tool translate (TTR and variants) for the editor UI,
+// and doc translate for the class reference (DTR).
 #ifdef TOOLS_ENABLED
-
-//gets parsed
-String TTR(const String &);
-//use for C strings
+// Gets parsed.
+String TTR(const String &p_text, const String &p_context = "");
+String DTR(const String &);
+// Use for C strings.
 #define TTRC(m_value) (m_value)
-//use to avoid parsing (for use later with C strings)
+// Use to avoid parsing (for use later with C strings).
 #define TTRGET(m_value) TTR(m_value)
 
 #else
-
 #define TTR(m_value) (String())
+#define DTR(m_value) (String())
 #define TTRC(m_value) (m_value)
 #define TTRGET(m_value) (m_value)
-
 #endif
 
-//tool or regular translate
+// Use this to mark property names for editor translation.
+// Often for dynamic properties defined in _get_property_list().
+// Property names defined directly inside EDITOR_DEF, GLOBAL_DEF, and ADD_PROPERTY macros don't need this.
+#define PNAME(m_value) (m_value)
+
+// Similar to PNAME, but to mark groups, i.e. properties with PROPERTY_USAGE_GROUP.
+// Groups defined directly inside ADD_GROUP macros don't need this.
+// The arguments are the same as ADD_GROUP. m_prefix is only used for extraction.
+#define GNAME(m_value, m_prefix) (m_value)
+
+// Runtime translate for the public node API.
 String RTR(const String &);
 
 bool is_symbol(CharType c);
 bool select_word(const String &p_s, int p_col, int &r_beg, int &r_end);
 
-#endif // USTRING_H
+#endif // USTRING_GODOT_H

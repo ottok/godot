@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -35,16 +35,17 @@
 #include "scene/resources/shape.h"
 
 class CollisionObject : public Spatial {
-
 	GDCLASS(CollisionObject, Spatial);
+
+	uint32_t collision_layer = 1;
+	uint32_t collision_mask = 1;
 
 	bool area;
 
 	RID rid;
 
 	struct ShapeData {
-
-		Object *owner;
+		ObjectID owner_id;
 		Transform xform;
 		struct ShapeBase {
 			RID debug_shape;
@@ -57,13 +58,14 @@ class CollisionObject : public Spatial {
 
 		ShapeData() {
 			disabled = false;
-			owner = NULL;
+			owner_id = 0;
 		}
 	};
 
 	int total_subshapes;
 
 	Map<uint32_t, ShapeData> shapes;
+	bool only_update_transform_changes = false; //this is used for sync physics in KinematicBody
 
 	bool capture_input_on_drag;
 	bool ray_pickable;
@@ -90,9 +92,23 @@ protected:
 	virtual void _mouse_enter();
 	virtual void _mouse_exit();
 
+	void set_only_update_transform_changes(bool p_enable);
+
 	void _on_transform_changed();
 
 public:
+	void set_collision_layer(uint32_t p_layer);
+	uint32_t get_collision_layer() const;
+
+	void set_collision_mask(uint32_t p_mask);
+	uint32_t get_collision_mask() const;
+
+	void set_collision_layer_bit(int p_bit, bool p_value);
+	bool get_collision_layer_bit(int p_bit) const;
+
+	void set_collision_mask_bit(int p_bit, bool p_value);
+	bool get_collision_mask_bit(int p_bit) const;
+
 	uint32_t create_shape_owner(Object *p_owner);
 	void remove_shape_owner(uint32_t owner);
 	void get_shape_owners(List<uint32_t> *r_owners);
@@ -129,4 +145,4 @@ public:
 	~CollisionObject();
 };
 
-#endif // COLLISION_OBJECT__H
+#endif // COLLISION_OBJECT_H

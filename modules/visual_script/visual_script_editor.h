@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,8 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifndef VISUALSCRIPT_EDITOR_H
-#define VISUALSCRIPT_EDITOR_H
+#ifndef VISUAL_SCRIPT_EDITOR_H
+#define VISUAL_SCRIPT_EDITOR_H
 
 #include "editor/create_dialog.h"
 #include "editor/plugins/script_editor_plugin.h"
@@ -133,10 +133,10 @@ class VisualScriptEditor : public ScriptEditorBase {
 		String name;
 		Variant::Type ret;
 		bool ret_variant;
-		Vector<Pair<Variant::Type, String> > args;
+		Vector<Pair<Variant::Type, String>> args;
 	};
 
-	HashMap<StringName, Ref<StyleBox> > node_styles;
+	HashMap<StringName, Ref<StyleBox>> node_styles;
 	StringName edited_func;
 	StringName default_func;
 
@@ -153,8 +153,7 @@ class VisualScriptEditor : public ScriptEditorBase {
 	String _validate_name(const String &p_name) const;
 
 	struct Clipboard {
-
-		Map<int, Ref<VisualScriptNode> > nodes;
+		Map<int, Ref<VisualScriptNode>> nodes;
 		Map<int, Vector2> nodes_positions;
 
 		Set<VisualScript::SequenceConnection> sequence_connections;
@@ -180,6 +179,9 @@ class VisualScriptEditor : public ScriptEditorBase {
 
 	void _port_action_menu(int p_option, const StringName &p_func);
 
+	NodePath drop_path;
+	Node *drop_node = nullptr;
+	Vector2 drop_position;
 	void connect_data(Ref<VisualScriptNode> vnode_old, Ref<VisualScriptNode> vnode, int new_id);
 
 	void _selected_connect_node(const String &p_text, const String &p_category, const bool p_connecting = true);
@@ -253,7 +255,9 @@ class VisualScriptEditor : public ScriptEditorBase {
 	void _node_item_selected();
 	void _node_item_unselected();
 
-	void _on_nodes_delete();
+	void _on_nodes_copy();
+	void _on_nodes_paste();
+	void _on_nodes_delete(const Array &p_nodes);
 	void _on_nodes_duplicate();
 
 	Variant get_drag_data_fw(const Point2 &p_point, Control *p_from);
@@ -358,4 +362,4 @@ public:
 };
 #endif
 
-#endif // VISUALSCRIPT_EDITOR_H
+#endif // VISUAL_SCRIPT_EDITOR_H

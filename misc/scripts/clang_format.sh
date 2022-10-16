@@ -23,7 +23,7 @@ while IFS= read -rd '' f; do
     for extension in ${CLANG_FORMAT_FILE_EXTS[@]}; do
         if [[ "$f" == *"$extension" ]]; then
             # Run clang-format.
-            clang-format -i "$f"
+            clang-format --Wno-error=unknown -i "$f"
             # Fix copyright headers, but not all files get them.
             if [[ "$f" == *"inc" ]]; then
                 continue 2
@@ -31,7 +31,11 @@ while IFS= read -rd '' f; do
                 continue 2
             elif [[ "$f" == *"theme_data.h" ]]; then
                 continue 2
-            elif [[ "$f" == "platform/android/java/lib/src/org/godotengine/godot/input/InputManager"* ]]; then
+            elif [[ "$f" == "platform/android/java/lib/src/org/godotengine/godot/gl/GLSurfaceView"* ]]; then
+                continue 2
+            elif [[ "$f" == "platform/android/java/lib/src/org/godotengine/godot/gl/EGLLogWrapper"* ]]; then
+                continue 2
+            elif [[ "$f" == "platform/android/java/lib/src/org/godotengine/godot/utils/ProcessPhoenix"* ]]; then
                 continue 2
             fi
             python misc/scripts/copyright_headers.py "$f"
@@ -40,7 +44,7 @@ while IFS= read -rd '' f; do
     done
 done
 
-git diff > patch.patch
+git diff --color > patch.patch
 
 # If no patch has been generated all is OK, clean up, and exit.
 if [ ! -s patch.patch ] ; then

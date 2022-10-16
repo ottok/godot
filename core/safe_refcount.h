@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -52,7 +52,7 @@
 #define SAFE_NUMERIC_TYPE_PUN_GUARANTEES(m_type)                        \
 	static_assert(sizeof(SafeNumeric<m_type>) == sizeof(m_type), "");   \
 	static_assert(alignof(SafeNumeric<m_type>) == alignof(m_type), ""); \
-	static_assert(std::is_trivially_destructible<std::atomic<m_type> >::value, "");
+	static_assert(std::is_trivially_destructible<std::atomic<m_type>>::value, "");
 
 #if defined(DEBUG_ENABLED)
 void check_lockless_atomics();
@@ -113,7 +113,7 @@ public:
 			if (tmp >= p_value) {
 				return tmp; // already greater, or equal
 			}
-			if (value.compare_exchange_weak(tmp, p_value, std::memory_order_release)) {
+			if (value.compare_exchange_weak(tmp, p_value, std::memory_order_acq_rel)) {
 				return p_value;
 			}
 		}
@@ -125,7 +125,7 @@ public:
 			if (c == 0) {
 				return 0;
 			}
-			if (value.compare_exchange_weak(c, c + 1, std::memory_order_release)) {
+			if (value.compare_exchange_weak(c, c + 1, std::memory_order_acq_rel)) {
 				return c + 1;
 			}
 		}

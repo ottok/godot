@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,21 +28,21 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifdef WINMIDI_ENABLED
-
 #ifndef MIDI_DRIVER_WINMIDI_H
 #define MIDI_DRIVER_WINMIDI_H
+
+#ifdef WINMIDI_ENABLED
 
 #include "core/os/midi_driver.h"
 #include "core/vector.h"
 
 #include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <mmsystem.h>
 
 class MIDIDriverWinMidi : public MIDIDriver {
-
 	Vector<HMIDIIN> connected_sources;
 
 	static void CALLBACK read(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
@@ -57,5 +57,6 @@ public:
 	virtual ~MIDIDriverWinMidi();
 };
 
-#endif // MIDI_DRIVER_WINMIDI_H
 #endif // WINMIDI_ENABLED
+
+#endif // MIDI_DRIVER_WINMIDI_H

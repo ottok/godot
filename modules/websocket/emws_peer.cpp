@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -49,22 +49,23 @@ EMWSPeer::WriteMode EMWSPeer::get_write_mode() const {
 }
 
 Error EMWSPeer::read_msg(const uint8_t *p_data, uint32_t p_size, bool p_is_string) {
-
 	uint8_t is_string = p_is_string ? 1 : 0;
 	return _in_buffer.write_packet(p_data, p_size, &is_string);
 }
 
 Error EMWSPeer::put_packet(const uint8_t *p_buffer, int p_buffer_size) {
-	ERR_FAIL_COND_V(_out_buf_size && ((uint64_t)godot_js_websocket_buffered_amount(peer_sock) >= (1ULL << _out_buf_size)), ERR_OUT_OF_MEMORY);
+	ERR_FAIL_COND_V(_out_buf_size && ((uint64_t)godot_js_websocket_buffered_amount(peer_sock) + p_buffer_size >= (1ULL << _out_buf_size)), ERR_OUT_OF_MEMORY);
 
 	int is_bin = write_mode == WebSocketPeer::WRITE_MODE_BINARY ? 1 : 0;
 
-	godot_js_websocket_send(peer_sock, p_buffer, p_buffer_size, is_bin);
+	if (godot_js_websocket_send(peer_sock, p_buffer, p_buffer_size, is_bin) != 0) {
+		return FAILED;
+	}
+
 	return OK;
 };
 
 Error EMWSPeer::get_packet(const uint8_t **r_buffer, int &r_buffer_size) {
-
 	if (_in_buffer.packets_left() == 0)
 		return ERR_UNAVAILABLE;
 
@@ -80,7 +81,6 @@ Error EMWSPeer::get_packet(const uint8_t **r_buffer, int &r_buffer_size) {
 };
 
 int EMWSPeer::get_available_packet_count() const {
-
 	return _in_buffer.packets_left();
 };
 
@@ -92,17 +92,14 @@ int EMWSPeer::get_current_outbound_buffered_amount() const {
 }
 
 bool EMWSPeer::was_string_packet() const {
-
 	return _is_string;
 };
 
 bool EMWSPeer::is_connected_to_host() const {
-
 	return peer_sock != -1;
 };
 
 void EMWSPeer::close(int p_code, String p_reason) {
-
 	if (peer_sock != -1) {
 		godot_js_websocket_close(peer_sock, p_code, p_reason.utf8().get_data());
 	}
@@ -112,17 +109,14 @@ void EMWSPeer::close(int p_code, String p_reason) {
 };
 
 IP_Address EMWSPeer::get_connected_host() const {
-
 	ERR_FAIL_V_MSG(IP_Address(), "Not supported in HTML5 export.");
 };
 
 uint16_t EMWSPeer::get_connected_port() const {
-
 	ERR_FAIL_V_MSG(0, "Not supported in HTML5 export.");
 };
 
 void EMWSPeer::set_no_delay(bool p_enabled) {
-
 	ERR_FAIL_MSG("'set_no_delay' is not supported in HTML5 export.");
 }
 
@@ -134,7 +128,6 @@ EMWSPeer::EMWSPeer() {
 };
 
 EMWSPeer::~EMWSPeer() {
-
 	close();
 };
 

@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -33,7 +33,6 @@ Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
 Copyright (c) 2006-2019, assimp team
-
 
 All rights reserved.
 
@@ -73,8 +72,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file  FBXParser.h
  *  @brief FBX parsing code
  */
-#ifndef FBX_PARSER_H
-#define FBX_PARSER_H
+
+#ifndef FBXPARSER_H
+#define FBXPARSER_H
 
 #include <stdint.h>
 #include <map>
@@ -187,7 +187,7 @@ private:
 class Parser {
 public:
 	/** Parse given a token list. Does not take ownership of the tokens -
-     *  the objects must persist during the entire parser lifetime */
+	 *  the objects must persist during the entire parser lifetime */
 	Parser(const TokenList &tokens, bool is_binary);
 	~Parser();
 
@@ -261,4 +261,4 @@ Transform ReadMatrix(const ElementPtr element);
 
 } // namespace FBXDocParser
 
-#endif // FBX_PARSER_H
+#endif // FBXPARSER_H

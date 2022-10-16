@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -52,9 +52,9 @@ Line2D::Line2D() {
 
 #ifdef TOOLS_ENABLED
 Rect2 Line2D::_edit_get_rect() const {
-
-	if (_points.size() == 0)
+	if (_points.size() == 0) {
 		return Rect2(0, 0, 0, 0);
+	}
 	Vector2 d = Vector2(_width, _width);
 	Rect2 aabb = Rect2(_points[0] - d, 2 * d);
 	for (int i = 1; i < _points.size(); i++) {
@@ -69,13 +69,13 @@ bool Line2D::_edit_use_rect() const {
 }
 
 bool Line2D::_edit_is_selected_on_click(const Point2 &p_point, double p_tolerance) const {
-
 	const real_t d = _width / 2 + p_tolerance;
 	PoolVector<Vector2>::Read points = _points.read();
 	for (int i = 0; i < _points.size() - 1; i++) {
 		Vector2 p = Geometry::get_closest_point_to_segment_2d(p_point, &points[i]);
-		if (p.distance_to(p_point) <= d)
+		if (p.distance_to(p_point) <= d) {
 			return true;
+		}
 	}
 
 	return false;
@@ -88,8 +88,9 @@ void Line2D::set_points(const PoolVector<Vector2> &p_points) {
 }
 
 void Line2D::set_width(float p_width) {
-	if (p_width < 0.0)
+	if (p_width < 0.0) {
 		p_width = 0.0;
+	}
 	_width = p_width;
 	update();
 }
@@ -169,7 +170,6 @@ Color Line2D::get_default_color() const {
 }
 
 void Line2D::set_gradient(const Ref<Gradient> &p_gradient) {
-
 	// Cleanup previous connection if any
 	if (_gradient.is_valid()) {
 		_gradient->disconnect(CoreStringNames::get_singleton()->changed, this, "_gradient_changed");
@@ -243,8 +243,9 @@ void Line2D::_notification(int p_what) {
 }
 
 void Line2D::set_sharp_limit(float p_limit) {
-	if (p_limit < 0.f)
+	if (p_limit < 0.f) {
 		p_limit = 0.f;
+	}
 	_sharp_limit = p_limit;
 	update();
 }
@@ -254,9 +255,7 @@ float Line2D::get_sharp_limit() const {
 }
 
 void Line2D::set_round_precision(int p_precision) {
-	if (p_precision < 1)
-		p_precision = 1;
-	_round_precision = p_precision;
+	_round_precision = MAX(1, p_precision);
 	update();
 }
 
@@ -274,8 +273,9 @@ bool Line2D::get_antialiased() const {
 }
 
 void Line2D::_draw() {
-	if (_points.size() <= 1 || _width == 0.f)
+	if (_points.size() <= 1 || _width == 0.f) {
 		return;
+	}
 
 	// TODO Is this really needed?
 	// Copy points for faster access
@@ -352,17 +352,16 @@ void Line2D::_curve_changed() {
 
 // static
 void Line2D::_bind_methods() {
-
 	ClassDB::bind_method(D_METHOD("set_points", "points"), &Line2D::set_points);
 	ClassDB::bind_method(D_METHOD("get_points"), &Line2D::get_points);
 
-	ClassDB::bind_method(D_METHOD("set_point_position", "i", "position"), &Line2D::set_point_position);
-	ClassDB::bind_method(D_METHOD("get_point_position", "i"), &Line2D::get_point_position);
+	ClassDB::bind_method(D_METHOD("set_point_position", "index", "position"), &Line2D::set_point_position);
+	ClassDB::bind_method(D_METHOD("get_point_position", "index"), &Line2D::get_point_position);
 
 	ClassDB::bind_method(D_METHOD("get_point_count"), &Line2D::get_point_count);
 
-	ClassDB::bind_method(D_METHOD("add_point", "position", "at_position"), &Line2D::add_point, DEFVAL(-1));
-	ClassDB::bind_method(D_METHOD("remove_point", "i"), &Line2D::remove_point);
+	ClassDB::bind_method(D_METHOD("add_point", "position", "index"), &Line2D::add_point, DEFVAL(-1));
+	ClassDB::bind_method(D_METHOD("remove_point", "index"), &Line2D::remove_point);
 
 	ClassDB::bind_method(D_METHOD("clear_points"), &Line2D::clear_points);
 
@@ -416,7 +415,7 @@ void Line2D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "end_cap_mode", PROPERTY_HINT_ENUM, "None,Box,Round"), "set_end_cap_mode", "get_end_cap_mode");
 	ADD_GROUP("Border", "");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "sharp_limit"), "set_sharp_limit", "get_sharp_limit");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "round_precision"), "set_round_precision", "get_round_precision");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "round_precision", PROPERTY_HINT_RANGE, "1,32,1"), "set_round_precision", "get_round_precision");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "antialiased"), "set_antialiased", "get_antialiased");
 
 	BIND_ENUM_CONSTANT(LINE_JOINT_SHARP);

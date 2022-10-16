@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -32,14 +32,16 @@
 #define LOCAL_VECTOR_H
 
 #include "core/error_macros.h"
-#include "core/os/copymem.h"
 #include "core/os/memory.h"
+#include "core/pool_vector.h"
 #include "core/sort_array.h"
 #include "core/vector.h"
 
+#include <type_traits>
+
 template <class T, class U = uint32_t, bool force_trivial = false>
 class LocalVector {
-private:
+protected:
 	U count = 0;
 	U capacity = 0;
 	T *data = nullptr;
@@ -64,7 +66,7 @@ public:
 			CRASH_COND_MSG(!data, "Out of memory");
 		}
 
-		if (!__has_trivial_constructor(T) && !force_trivial) {
+		if (!std::is_trivially_constructible<T>::value && !force_trivial) {
 			memnew_placement(&data[count++], T(p_elem));
 		} else {
 			data[count++] = p_elem;
@@ -77,7 +79,7 @@ public:
 		for (U i = p_index; i < count; i++) {
 			data[i] = data[i + 1];
 		}
-		if (!__has_trivial_destructor(T) && !force_trivial) {
+		if (!std::is_trivially_destructible<T>::value && !force_trivial) {
 			data[count].~T();
 		}
 	}
@@ -90,7 +92,7 @@ public:
 		if (count > p_index) {
 			data[p_index] = data[count];
 		}
-		if (!__has_trivial_destructor(T) && !force_trivial) {
+		if (!std::is_trivially_destructible<T>::value && !force_trivial) {
 			data[count].~T();
 		}
 	}
@@ -100,6 +102,22 @@ public:
 		if (idx >= 0) {
 			remove(idx);
 		}
+	}
+
+	U erase_multiple_unordered(const T &p_val) {
+		U from = 0;
+		U count = 0;
+		while (true) {
+			int64_t idx = find(p_val, from);
+
+			if (idx == -1) {
+				break;
+			}
+			remove_unordered(idx);
+			from = idx;
+			count++;
+		}
+		return count;
 	}
 
 	void invert() {
@@ -130,7 +148,7 @@ public:
 	_FORCE_INLINE_ U size() const { return count; }
 	void resize(U p_size) {
 		if (p_size < count) {
-			if (!__has_trivial_destructor(T) && !force_trivial) {
+			if (!std::is_trivially_destructible<T>::value && !force_trivial) {
 				for (U i = p_size; i < count; i++) {
 					data[i].~T();
 				}
@@ -147,7 +165,7 @@ public:
 				data = (T *)memrealloc(data, capacity * sizeof(T));
 				CRASH_COND_MSG(!data, "Out of memory");
 			}
-			if (!__has_trivial_constructor(T) && !force_trivial) {
+			if (!std::is_trivially_constructible<T>::value && !force_trivial) {
 				for (U i = count; i < p_size; i++) {
 					memnew_placement(&data[i], T);
 				}
@@ -164,13 +182,19 @@ public:
 		return data[p_index];
 	}
 
+	void fill(T p_val) {
+		for (U i = 0; i < count; i++) {
+			data[i] = p_val;
+		}
+	}
+
 	void insert(U p_pos, T p_val) {
 		ERR_FAIL_UNSIGNED_INDEX(p_pos, count + 1);
 		if (p_pos == count) {
 			push_back(p_val);
 		} else {
 			resize(count + 1);
-			for (U i = count; i > p_pos; i--) {
+			for (U i = count - 1; i > p_pos; i--) {
 				data[i] = data[i - 1];
 			}
 			data[p_pos] = p_val;
@@ -198,7 +222,7 @@ public:
 	}
 
 	void sort() {
-		sort_custom<_DefaultComparator<T> >();
+		sort_custom<_DefaultComparator<T>>();
 	}
 
 	void ordered_insert(T p_val) {
@@ -215,15 +239,26 @@ public:
 		Vector<T> ret;
 		ret.resize(size());
 		T *w = ret.ptrw();
-		copymem(w, data, sizeof(T) * count);
+		memcpy(w, data, sizeof(T) * count);
 		return ret;
+	}
+
+	operator PoolVector<T>() const {
+		PoolVector<T> pl;
+		if (size()) {
+			pl.resize(size());
+			typename PoolVector<T>::Write w = pl.write();
+			T *dest = w.ptr();
+			memcpy(dest, data, sizeof(T) * count);
+		}
+		return pl;
 	}
 
 	Vector<uint8_t> to_byte_array() const { //useful to pass stuff to gpu or variant
 		Vector<uint8_t> ret;
 		ret.resize(count * sizeof(T));
 		uint8_t *w = ret.ptrw();
-		copymem(w, data, sizeof(T) * count);
+		memcpy(w, data, sizeof(T) * count);
 		return ret;
 	}
 
@@ -232,6 +267,19 @@ public:
 		resize(p_from.size());
 		for (U i = 0; i < p_from.count; i++) {
 			data[i] = p_from.data[i];
+		}
+	}
+	LocalVector(const Vector<T> &p_from) {
+		resize(p_from.size());
+		for (U i = 0; i < count; i++) {
+			data[i] = p_from[i];
+		}
+	}
+	LocalVector(const PoolVector<T> &p_from) {
+		resize(p_from.size());
+		typename PoolVector<T>::Read r = p_from.read();
+		for (U i = 0; i < count; i++) {
+			data[i] = r[i];
 		}
 	}
 	inline LocalVector &operator=(const LocalVector &p_from) {
@@ -248,12 +296,25 @@ public:
 		}
 		return *this;
 	}
+	inline LocalVector &operator=(const PoolVector<T> &p_from) {
+		resize(p_from.size());
+		typename PoolVector<T>::Read r = p_from.read();
+		for (U i = 0; i < count; i++) {
+			data[i] = r[i];
+		}
+		return *this;
+	}
 
 	_FORCE_INLINE_ ~LocalVector() {
 		if (data) {
 			reset();
 		}
 	}
+};
+
+// Integer default version
+template <class T, class I = int32_t, bool force_trivial = false>
+class LocalVectori : public LocalVector<T, I, force_trivial> {
 };
 
 #endif // LOCAL_VECTOR_H

@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,13 +28,12 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifndef LINE2D_H
-#define LINE2D_H
+#ifndef LINE_2D_H
+#define LINE_2D_H
 
 #include "node_2d.h"
 
 class Line2D : public Node2D {
-
 	GDCLASS(Line2D, Node2D);
 
 public:
@@ -139,4 +138,4 @@ private:
 	bool _antialiased;
 };
 
-#endif // LINE2D_H
+#endif // LINE_2D_H

@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -41,49 +41,51 @@
 
 class OS_JavaScript : public OS_Unix {
 private:
+	struct JSTouchEvent {
+		uint32_t identifier[32] = { 0 };
+		double coords[64] = { 0 };
+	};
+	JSTouchEvent touch_event;
+
+	struct JSKeyEvent {
+		char code[32] = { 0 };
+		char key[32] = { 0 };
+		uint8_t modifiers[4] = { 0 };
+	};
+	JSKeyEvent key_event;
+
 	VideoMode video_mode;
-	bool window_maximized;
-	bool entering_fullscreen;
-	bool just_exited_fullscreen;
 	bool transparency_enabled;
 
 	EMSCRIPTEN_WEBGL_CONTEXT_HANDLE webgl_ctx;
 
 	InputDefault *input;
-	Ref<InputEventKey> deferred_key_event;
 	CursorShape cursor_shape;
 	Point2 touches[32];
 
 	char canvas_id[256];
 	bool cursor_inside_canvas;
 	Point2i last_click_pos;
-	double last_click_ms;
+	uint64_t last_click_ms;
 	int last_click_button_index;
 
 	MainLoop *main_loop;
 	int video_driver_index;
-	AudioDriverJavaScript *audio_driver_javascript;
+	List<AudioDriverJavaScript *> audio_drivers;
 	VisualServer *visual_server;
 
 	bool swap_ok_cancel;
 	bool idb_available;
 	bool idb_needs_sync;
 	bool idb_is_syncing;
+	bool pwa_is_waiting;
 
-	static Point2 compute_position_in_canvas(int x, int y);
-	static EM_BOOL fullscreen_change_callback(int p_event_type, const EmscriptenFullscreenChangeEvent *p_event, void *p_user_data);
-
-	static EM_BOOL keydown_callback(int p_event_type, const EmscriptenKeyboardEvent *p_event, void *p_user_data);
-	static EM_BOOL keypress_callback(int p_event_type, const EmscriptenKeyboardEvent *p_event, void *p_user_data);
-	static EM_BOOL keyup_callback(int p_event_type, const EmscriptenKeyboardEvent *p_event, void *p_user_data);
-
-	static EM_BOOL mousemove_callback(int p_event_type, const EmscriptenMouseEvent *p_event, void *p_user_data);
-	static EM_BOOL mouse_button_callback(int p_event_type, const EmscriptenMouseEvent *p_event, void *p_user_data);
-
-	static EM_BOOL wheel_callback(int p_event_type, const EmscriptenWheelEvent *p_event, void *p_user_data);
-
-	static EM_BOOL touch_press_callback(int p_event_type, const EmscriptenTouchEvent *p_event, void *p_user_data);
-	static EM_BOOL touchmove_callback(int p_event_type, const EmscriptenTouchEvent *p_event, void *p_user_data);
+	static void fullscreen_change_callback(int p_fullscreen);
+	static int mouse_button_callback(int p_pressed, int p_button, double p_x, double p_y, int p_modifiers);
+	static void mouse_move_callback(double p_x, double p_y, double p_rel_x, double p_rel_y, int p_modifiers);
+	static int mouse_wheel_callback(double p_delta_x, double p_delta_y);
+	static void key_callback(int p_pressed, int p_repeat, int p_modifiers);
+	static void touch_callback(int p_type, int p_count);
 
 	static void gamepad_callback(int p_index, int p_connected, const char *p_id, const char *p_guid);
 	static void input_text_callback(const char *p_text, int p_cursor);
@@ -92,10 +94,12 @@ private:
 	static void file_access_close_callback(const String &p_file, int p_flags);
 
 	static void request_quit_callback();
+	static void window_blur_callback();
 	static void drop_files_callback(char **p_filev, int p_filec);
 	static void send_notification_callback(int p_notification);
 	static void fs_sync_callback();
 	static void update_clipboard_callback(const char *p_text);
+	static void update_pwa_state_callback();
 
 protected:
 	void resume_audio();
@@ -114,6 +118,8 @@ protected:
 
 public:
 	bool check_size_force_redraw();
+	bool pwa_needs_update() const { return pwa_is_waiting; }
+	Error pwa_update();
 
 	// Override return type to make writing static callbacks less tedious.
 	static OS_JavaScript *get_singleton();
@@ -166,9 +172,10 @@ public:
 	virtual MainLoop *get_main_loop() const;
 	bool main_loop_iterate();
 
-	virtual Error execute(const String &p_path, const List<String> &p_arguments, bool p_blocking = true, ProcessID *r_child_id = NULL, String *r_pipe = NULL, int *r_exitcode = NULL, bool read_stderr = false, Mutex *p_pipe_mutex = NULL);
+	virtual Error execute(const String &p_path, const List<String> &p_arguments, bool p_blocking = true, ProcessID *r_child_id = NULL, String *r_pipe = NULL, int *r_exitcode = NULL, bool read_stderr = false, Mutex *p_pipe_mutex = NULL, bool p_open_console = false);
 	virtual Error kill(const ProcessID &p_pid);
 	virtual int get_process_id() const;
+	bool is_process_running(const ProcessID &p_pid) const;
 	int get_processor_count() const;
 
 	virtual void alert(const String &p_alert, const String &p_title = "ALERT!");
@@ -179,6 +186,7 @@ public:
 	virtual String get_name() const;
 	virtual void add_frame_delay(bool p_can_draw) {}
 	virtual bool can_draw() const;
+	virtual void vibrate_handheld(int p_duration_ms);
 
 	virtual String get_cache_path() const;
 	virtual String get_config_path() const;
@@ -194,4 +202,4 @@ public:
 	OS_JavaScript();
 };
 
-#endif
+#endif // OS_JAVASCRIPT_H

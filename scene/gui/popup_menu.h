@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -34,7 +34,6 @@
 #include "scene/gui/popup.h"
 
 class PopupMenu : public Popup {
-
 	GDCLASS(PopupMenu, Popup);
 
 	struct Item {
@@ -77,6 +76,8 @@ class PopupMenu : public Popup {
 		}
 	};
 
+	bool activated_by_keyboard;
+
 	Timer *submenu_timer;
 	List<Rect2> autohide_areas;
 	Vector<Item> items;
@@ -90,7 +91,7 @@ class PopupMenu : public Popup {
 	virtual Size2 get_minimum_size() const;
 	void _scroll(float p_factor, const Point2 &p_over);
 	void _gui_input(const Ref<InputEvent> &p_event);
-	void _activate_submenu(int over);
+	void _activate_submenu(int over, bool p_by_keyboard = false);
 	void _submenu_timeout();
 
 	bool invalidated_click;
@@ -176,7 +177,9 @@ public:
 	Ref<ShortCut> get_item_shortcut(int p_idx) const;
 	int get_item_state(int p_idx) const;
 
+	void set_current_index(int p_idx);
 	int get_current_index() const;
+
 	int get_item_count() const;
 
 	bool activate_item_by_event(const Ref<InputEvent> &p_event, bool p_for_global_only = false);
@@ -221,4 +224,4 @@ public:
 	~PopupMenu();
 };
 
-#endif
+#endif // POPUP_MENU_H

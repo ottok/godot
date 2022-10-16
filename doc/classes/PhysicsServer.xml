@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="PhysicsServer" inherits="Object" version="3.3">
+<class name="PhysicsServer" inherits="Object" version="3.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
 	<brief_description>
 		Server interface for low-level physics access.
 	</brief_description>
@@ -325,14 +325,13 @@
 			<argument index="0" name="body" type="RID" />
 			<description>
 				Returns the physics layer or layers a body can collide with.
--
 			</description>
 		</method>
 		<method name="body_get_direct_state">
 			<return type="PhysicsDirectBodyState" />
 			<argument index="0" name="body" type="RID" />
 			<description>
-				Returns the [PhysicsDirectBodyState] of the body.
+				Returns the [PhysicsDirectBodyState] of the body. Returns [code]null[/code] if the body is destroyed or removed from the physics space.
 			</description>
 		</method>
 		<method name="body_get_kinematic_safe_margin" qualifiers="const">
@@ -595,6 +594,19 @@
 				Sets a body state (see [enum BodyState] constants).
 			</description>
 		</method>
+		<method name="body_test_motion">
+			<return type="bool" />
+			<argument index="0" name="body" type="RID" />
+			<argument index="1" name="from" type="Transform" />
+			<argument index="2" name="motion" type="Vector3" />
+			<argument index="3" name="infinite_inertia" type="bool" />
+			<argument index="4" name="result" type="PhysicsTestMotionResult" default="null" />
+			<argument index="5" name="exclude_raycast_shapes" type="bool" default="true" />
+			<argument index="6" name="exclude" type="Array" default="[  ]" />
+			<description>
+				Returns [code]true[/code] if a collision would result from moving in the given direction from a given point in space. [PhysicsTestMotionResult] can be passed to return additional information in.
+			</description>
+		</method>
 		<method name="cone_twist_joint_get_param" qualifiers="const">
 			<return type="float" />
 			<argument index="0" name="joint" type="RID" />
@@ -661,7 +673,7 @@
 			<return type="int" />
 			<argument index="0" name="process_info" type="int" enum="PhysicsServer.ProcessInfo" />
 			<description>
-				Returns an Info defined by the [enum ProcessInfo] input given.
+				Returns information about the current state of the 3D physics engine. See [enum ProcessInfo] for a list of available states. Only implemented for Godot Physics.
 			</description>
 		</method>
 		<method name="hinge_joint_get_flag" qualifiers="const">
@@ -822,6 +834,14 @@
 			<argument index="0" name="active" type="bool" />
 			<description>
 				Activates or deactivates the 3D physics engine.
+			</description>
+		</method>
+		<method name="set_collision_iterations">
+			<return type="void" />
+			<argument index="0" name="iterations" type="int" />
+			<description>
+				Sets the amount of iterations for calculating velocities of colliding bodies. The greater the amount of iterations, the more accurate the collisions will be. However, a greater amount of iterations requires more CPU power, which can decrease performance. The default value is [code]8[/code].
+				[b]Note:[/b] Only has an effect when using the GodotPhysics engine, not the default Bullet physics engine.
 			</description>
 		</method>
 		<method name="shape_create">
@@ -1110,16 +1130,16 @@
 			Maximum acceleration for the motor at the axes.
 		</constant>
 		<constant name="G6DOF_JOINT_FLAG_ENABLE_LINEAR_LIMIT" value="0" enum="G6DOFJointAxisFlag">
-			If [code]set[/code] there is linear motion possible within the given limits.
+			If set, linear motion is possible within the given limits.
 		</constant>
 		<constant name="G6DOF_JOINT_FLAG_ENABLE_ANGULAR_LIMIT" value="1" enum="G6DOFJointAxisFlag">
-			If [code]set[/code] there is rotational motion possible.
+			If set, rotational motion is possible.
 		</constant>
 		<constant name="G6DOF_JOINT_FLAG_ENABLE_MOTOR" value="4" enum="G6DOFJointAxisFlag">
-			If [code]set[/code] there is a rotational motor across these axes.
+			If set, there is a rotational motor across these axes.
 		</constant>
 		<constant name="G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR" value="5" enum="G6DOFJointAxisFlag">
-			If [code]set[/code] there is a linear motor on this axis that targets a specific velocity.
+			If set, there is a linear motor on this axis that targets a specific velocity.
 		</constant>
 		<constant name="SHAPE_PLANE" value="0" enum="ShapeType">
 			The [Shape] is a [PlaneShape].
@@ -1275,8 +1295,6 @@
 		</constant>
 		<constant name="SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS" value="7" enum="SpaceParameter">
 			Constant to set/get the default solver bias for all physics constraints. A solver bias is a factor controlling how much two objects "rebound", after violating a constraint, to avoid leaving them in that state because of numerical imprecision.
-		</constant>
-		<constant name="SPACE_PARAM_TEST_MOTION_MIN_CONTACT_DEPTH" value="8" enum="SpaceParameter">
 		</constant>
 		<constant name="BODY_AXIS_LINEAR_X" value="1" enum="BodyAxis">
 		</constant>

@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -33,7 +33,6 @@ Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
 Copyright (c) 2006-2019, assimp team
-
 
 All rights reserved.
 
@@ -73,8 +72,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file  FBXProperties.h
  *  @brief FBX dynamic properties
  */
-#ifndef FBX_PROPERTIES_H
-#define FBX_PROPERTIES_H
+
+#ifndef FBXPROPERTIES_H
+#define FBXPROPERTIES_H
 
 #include "FBXParser.h"
 #include <map>
@@ -178,7 +178,7 @@ inline T PropertyGet(const PropertyTable *in, const std::string &name, const T &
 	}
 
 	// strong typing, no need to be lenient
-	const TypedProperty<T> *const tprop = prop->As<TypedProperty<T> >();
+	const TypedProperty<T> *const tprop = prop->As<TypedProperty<T>>();
 	if (nullptr == tprop) {
 		return defaultValue;
 	}
@@ -208,7 +208,7 @@ inline T PropertyGet(const PropertyTable *in, const std::string &name, bool &res
 	}
 
 	// strong typing, no need to be lenient
-	const TypedProperty<T> *const tprop = prop->As<TypedProperty<T> >();
+	const TypedProperty<T> *const tprop = prop->As<TypedProperty<T>>();
 	if (nullptr == tprop) {
 		result = false;
 		return T();
@@ -220,4 +220,4 @@ inline T PropertyGet(const PropertyTable *in, const std::string &name, bool &res
 
 } // namespace FBXDocParser
 
-#endif // FBX_PROPERTIES_H
+#endif // FBXPROPERTIES_H
