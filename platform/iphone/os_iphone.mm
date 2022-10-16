@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -54,6 +54,7 @@
 
 #import <UIKit/UIKit.h>
 #include <dlfcn.h>
+#include <sys/sysctl.h>
 #import <sys/utsname.h>
 
 extern int gl_view_base_fb; // from gl_view.mm
@@ -100,7 +101,6 @@ String OSIPhone::get_unique_id() const {
 };
 
 void OSIPhone::initialize_core() {
-
 	OS_Unix::initialize_core();
 
 	set_data_dir(data_dir);
@@ -119,7 +119,6 @@ void OSIPhone::start() {
 }
 
 Error OSIPhone::initialize(const VideoMode &p_desired, int p_video_driver, int p_audio_driver) {
-
 	bool use_gl3 = GLOBAL_GET("rendering/quality/driver/driver_name") == "GLES3";
 	bool gl_initialization_error = false;
 
@@ -187,7 +186,6 @@ Error OSIPhone::initialize(const VideoMode &p_desired, int p_video_driver, int p
 };
 
 MainLoop *OSIPhone::get_main_loop() const {
-
 	return main_loop;
 };
 
@@ -205,6 +203,8 @@ bool OSIPhone::iterate() {
 		return true;
 	}
 
+	input->flush_buffered_events();
+
 	return Main::iteration();
 };
 
@@ -214,9 +214,35 @@ void OSIPhone::key(uint32_t p_key, bool p_pressed) {
 	ev->set_echo(false);
 	ev->set_pressed(p_pressed);
 	ev->set_scancode(p_key);
+	ev->set_physical_scancode(p_key);
 	ev->set_unicode(p_key);
 	perform_event(ev);
 };
+
+void OSIPhone::pencil_press(int p_idx, int p_x, int p_y, bool p_pressed, bool p_doubleclick) {
+	Ref<InputEventMouseButton> ev;
+	ev.instance();
+	ev->set_button_index(1);
+	ev->set_pressed(p_pressed);
+	ev->set_position(Vector2(p_x, p_y));
+	ev->set_global_position(Vector2(p_x, p_y));
+	ev->set_doubleclick(p_doubleclick);
+	perform_event(ev);
+};
+
+void OSIPhone::pencil_drag(int p_idx, int p_prev_x, int p_prev_y, int p_x, int p_y, float p_force) {
+	Ref<InputEventMouseMotion> ev;
+	ev.instance();
+	ev->set_pressure(p_force);
+	ev->set_position(Vector2(p_x, p_y));
+	ev->set_global_position(Vector2(p_x, p_y));
+	ev->set_relative(Vector2(p_x - p_prev_x, p_y - p_prev_y));
+	perform_event(ev);
+};
+
+void OSIPhone::pencil_cancelled(int p_idx) {
+	pencil_press(p_idx, -1, -1, false, false);
+}
 
 void OSIPhone::touch_press(int p_idx, int p_x, int p_y, bool p_pressed, bool p_doubleclick) {
 	if (GLOBAL_DEF("debug/disable_touch", false)) {
@@ -260,7 +286,6 @@ void OSIPhone::update_gravity(float p_x, float p_y, float p_z) {
 };
 
 void OSIPhone::update_accelerometer(float p_x, float p_y, float p_z) {
-
 	// Found out the Z should not be negated! Pass as is!
 	input->set_accelerometer(Vector3(p_x / (float)ACCEL_RANGE, p_y / (float)ACCEL_RANGE, p_z / (float)ACCEL_RANGE));
 };
@@ -285,12 +310,11 @@ void OSIPhone::joy_button(int p_device, int p_button, bool p_pressed) {
 	input->joy_button(p_device, p_button, p_pressed);
 };
 
-void OSIPhone::joy_axis(int p_device, int p_axis, const InputDefault::JoyAxis &p_value) {
+void OSIPhone::joy_axis(int p_device, int p_axis, float p_value) {
 	input->joy_axis(p_device, p_axis, p_value);
 };
 
 void OSIPhone::delete_main_loop() {
-
 	if (main_loop) {
 		main_loop->finish();
 		memdelete(main_loop);
@@ -300,7 +324,6 @@ void OSIPhone::delete_main_loop() {
 };
 
 void OSIPhone::finalize() {
-
 	delete_main_loop();
 
 	if (joypad_iphone) {
@@ -390,7 +413,6 @@ void OSIPhone::set_video_mode(const VideoMode &p_video_mode, int p_screen) {
 }
 
 OS::VideoMode OSIPhone::get_video_mode(int p_screen) const {
-
 	return video_mode;
 }
 
@@ -398,8 +420,23 @@ void OSIPhone::get_fullscreen_mode_list(List<VideoMode> *p_list, int p_screen) c
 	p_list->push_back(video_mode);
 }
 
-bool OSIPhone::can_draw() const {
+void OSIPhone::set_offscreen_gl_context(EAGLContext *p_context) {
+	offscreen_gl_context = p_context;
+}
 
+bool OSIPhone::is_offscreen_gl_available() const {
+	return offscreen_gl_context;
+}
+
+void OSIPhone::set_offscreen_gl_current(bool p_current) {
+	if (p_current) {
+		[EAGLContext setCurrentContext:offscreen_gl_context];
+	} else {
+		[EAGLContext setCurrentContext:nil];
+	}
+}
+
+bool OSIPhone::can_draw() const {
 	if (native_video_is_playing())
 		return false;
 	return true;
@@ -466,6 +503,20 @@ String OSIPhone::get_name() const {
 	return "iOS";
 }
 
+void OSIPhone::set_clipboard(const String &p_text) {
+	[UIPasteboard generalPasteboard].string = [NSString stringWithUTF8String:p_text.utf8()];
+}
+
+String OSIPhone::get_clipboard() const {
+	NSString *text = [UIPasteboard generalPasteboard].string;
+
+	return String::utf8([text UTF8String]);
+}
+
+String OSIPhone::get_cache_path() const {
+	return cache_dir;
+}
+
 String OSIPhone::get_model_name() const {
 	String model = ios->get_model();
 	if (model != "") {
@@ -514,6 +565,10 @@ int OSIPhone::get_screen_dpi(int p_screen) const {
 		default:
 			return 72;
 	}
+}
+
+float OSIPhone::get_screen_refresh_rate(int p_screen) const {
+	return [UIScreen mainScreen].maximumFramesPerSecond;
 }
 
 Rect2 OSIPhone::get_window_safe_area() const {
@@ -617,9 +672,22 @@ void OSIPhone::native_video_stop() {
 	}
 }
 
+String OSIPhone::get_processor_name() const {
+	char buffer[256];
+	size_t buffer_len = 256;
+	if (sysctlbyname("machdep.cpu.brand_string", &buffer, &buffer_len, NULL, 0) == 0) {
+		return String::utf8(buffer, buffer_len);
+	}
+	ERR_FAIL_V_MSG("", String("Couldn't get the CPU model name. Returning an empty string."));
+}
+
 void OSIPhone::vibrate_handheld(int p_duration_ms) {
-	// iOS does not support duration for vibration
-	AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+	if (ios->supports_haptic_engine()) {
+		ios->vibrate_haptic_engine((float)p_duration_ms / 1000.f);
+	} else {
+		// iOS <13 does not support duration for vibration
+		AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+	}
 }
 
 bool OSIPhone::_check_internal_feature_support(const String &p_feature) {
@@ -640,7 +708,7 @@ void add_ios_init_callback(init_callback cb) {
 	}
 }
 
-OSIPhone::OSIPhone(String p_data_dir) {
+OSIPhone::OSIPhone(String p_data_dir, String p_cache_dir) {
 	for (int i = 0; i < ios_init_callbacks_count; ++i) {
 		ios_init_callbacks[i]();
 	}
@@ -651,10 +719,12 @@ OSIPhone::OSIPhone(String p_data_dir) {
 
 	main_loop = NULL;
 	visual_server = NULL;
+	offscreen_gl_context = NULL;
 
 	// can't call set_data_dir from here, since it requires DirAccess
 	// which is initialized in initialize_core
 	data_dir = p_data_dir;
+	cache_dir = p_cache_dir;
 
 	Vector<Logger *> loggers;
 	loggers.push_back(memnew(SyslogLogger));

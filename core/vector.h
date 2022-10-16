@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -35,7 +35,7 @@
  * @class Vector
  * @author Juan Linietsky
  * Vector container. Regular Vector Container. Use with care and for smaller arrays when possible. Use PoolVector for large arrays.
-*/
+ */
 
 #include "core/cowdata.h"
 #include "core/error_macros.h"
@@ -64,11 +64,14 @@ private:
 
 public:
 	bool push_back(T p_elem);
+	void fill(T p_elem);
 
 	void remove(int p_index) { _cowdata.remove(p_index); }
 	void erase(const T &p_val) {
 		int idx = find(p_val);
-		if (idx >= 0) remove(idx);
+		if (idx >= 0) {
+			remove(idx);
+		}
 	};
 	void invert();
 
@@ -90,10 +93,10 @@ public:
 
 	template <class C>
 	void sort_custom() {
-
 		int len = _cowdata.size();
-		if (len == 0)
+		if (len == 0) {
 			return;
+		}
 
 		T *data = ptrw();
 		SortArray<T, C> sorter;
@@ -101,14 +104,12 @@ public:
 	}
 
 	void sort() {
-
-		sort_custom<_DefaultComparator<T> >();
+		sort_custom<_DefaultComparator<T>>();
 	}
 
 	void ordered_insert(const T &p_val) {
 		int i;
 		for (i = 0; i < _cowdata.size(); i++) {
-
 			if (p_val < operator[](i)) {
 				break;
 			};
@@ -123,12 +124,46 @@ public:
 		return *this;
 	}
 
+	Vector<uint8_t> to_byte_array() const {
+		Vector<uint8_t> ret;
+		ret.resize(size() * sizeof(T));
+		memcpy(ret.ptrw(), ptr(), sizeof(T) * size());
+		return ret;
+	}
+
+	Vector<T> slice(int p_begin, int p_end = INT32_MAX) const {
+		Vector<T> result;
+
+		const int s = size();
+
+		int begin = CLAMP(p_begin, -s, s);
+		if (begin < 0) {
+			begin += s;
+		}
+		int end = CLAMP(p_end, -s, s);
+		if (end < 0) {
+			end += s;
+		}
+
+		ERR_FAIL_COND_V(begin > end, result);
+
+		int result_size = end - begin;
+		result.resize(result_size);
+
+		const T *const r = ptr();
+		T *const w = result.ptrw();
+		for (int i = 0; i < result_size; ++i) {
+			w[i] = r[begin + i];
+		}
+
+		return result;
+	}
+
 	_FORCE_INLINE_ ~Vector() {}
 };
 
 template <class T>
 void Vector<T>::invert() {
-
 	for (int i = 0; i < size() / 2; i++) {
 		T *p = ptrw();
 		SWAP(p[i], p[size() - i - 1]);
@@ -138,17 +173,18 @@ void Vector<T>::invert() {
 template <class T>
 void Vector<T>::append_array(Vector<T> p_other) {
 	const int ds = p_other.size();
-	if (ds == 0)
+	if (ds == 0) {
 		return;
+	}
 	const int bs = size();
 	resize(bs + ds);
-	for (int i = 0; i < ds; ++i)
+	for (int i = 0; i < ds; ++i) {
 		ptrw()[bs + i] = p_other[i];
+	}
 }
 
 template <class T>
 bool Vector<T>::push_back(T p_elem) {
-
 	Error err = resize(size() + 1);
 	ERR_FAIL_COND_V(err, true);
 	set(size() - 1, p_elem);
@@ -156,4 +192,12 @@ bool Vector<T>::push_back(T p_elem) {
 	return false;
 }
 
-#endif
+template <class T>
+void Vector<T>::fill(T p_elem) {
+	T *p = ptrw();
+	for (int i = 0; i < size(); i++) {
+		p[i] = p_elem;
+	}
+}
+
+#endif // VECTOR_H

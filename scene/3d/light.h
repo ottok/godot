@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -36,7 +36,6 @@
 #include "servers/visual_server.h"
 
 class Light : public VisualInstance {
-
 	GDCLASS(Light, VisualInstance);
 	OBJ_CATEGORY("3D Light Nodes");
 
@@ -44,6 +43,7 @@ public:
 	enum Param {
 		PARAM_ENERGY = VS::LIGHT_PARAM_ENERGY,
 		PARAM_INDIRECT_ENERGY = VS::LIGHT_PARAM_INDIRECT_ENERGY,
+		PARAM_SIZE = VS::LIGHT_PARAM_SIZE,
 		PARAM_SPECULAR = VS::LIGHT_PARAM_SPECULAR,
 		PARAM_RANGE = VS::LIGHT_PARAM_RANGE,
 		PARAM_ATTENUATION = VS::LIGHT_PARAM_ATTENUATION,
@@ -81,10 +81,10 @@ private:
 
 	// bind helpers
 
+	virtual void owner_changed_notify();
+
 protected:
 	RID light;
-
-	virtual bool _can_gizmo_scale() const;
 
 	static void _bind_methods();
 	void _notification(int p_what);
@@ -133,7 +133,6 @@ VARIANT_ENUM_CAST(Light::Param);
 VARIANT_ENUM_CAST(Light::BakeMode);
 
 class DirectionalLight : public Light {
-
 	GDCLASS(DirectionalLight, Light);
 
 public:
@@ -155,6 +154,7 @@ private:
 
 protected:
 	static void _bind_methods();
+	virtual void _validate_property(PropertyInfo &property) const;
 
 public:
 	void set_shadow_mode(ShadowMode p_mode);
@@ -173,7 +173,6 @@ VARIANT_ENUM_CAST(DirectionalLight::ShadowMode)
 VARIANT_ENUM_CAST(DirectionalLight::ShadowDepthRange)
 
 class OmniLight : public Light {
-
 	GDCLASS(OmniLight, Light);
 
 public:
@@ -210,7 +209,6 @@ VARIANT_ENUM_CAST(OmniLight::ShadowMode)
 VARIANT_ENUM_CAST(OmniLight::ShadowDetail)
 
 class SpotLight : public Light {
-
 	GDCLASS(SpotLight, Light);
 
 protected:
@@ -223,4 +221,4 @@ public:
 			Light(VisualServer::LIGHT_SPOT) {}
 };
 
-#endif
+#endif // LIGHT_H

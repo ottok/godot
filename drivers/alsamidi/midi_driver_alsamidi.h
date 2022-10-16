@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -36,19 +36,19 @@
 #include "core/os/midi_driver.h"
 #include "core/os/mutex.h"
 #include "core/os/thread.h"
+#include "core/safe_refcount.h"
 #include "core/vector.h"
 
 #include "../alsa/asound-so_wrap.h"
 #include <stdio.h>
 
 class MIDIDriverALSAMidi : public MIDIDriver {
-
 	Thread thread;
 	Mutex mutex;
 
 	Vector<snd_rawmidi_t *> connected_inputs;
 
-	bool exit_thread;
+	SafeFlag exit_thread;
 
 	static void thread_func(void *p_udata);
 

@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -33,21 +33,21 @@
 
 #include "core/os/mutex.h"
 #include "core/os/thread.h"
+#include "core/safe_refcount.h"
 #include "servers/audio_server.h"
 
 #include <mmsystem.h>
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wrl/client.h>
 #include <xaudio2.h>
 
 class AudioDriverXAudio2 : public AudioDriver {
-
 	enum {
 		AUDIO_BUFFERS = 2
 	};
 
 	struct XAudio2DriverVoiceCallback : public IXAudio2VoiceCallback {
-
 		HANDLE buffer_end_event;
 		XAudio2DriverVoiceCallback() :
 				buffer_end_event(CreateEvent(NULL, FALSE, FALSE, NULL)) {}
@@ -78,9 +78,8 @@ class AudioDriverXAudio2 : public AudioDriver {
 
 	int channels;
 
-	bool active;
-	bool thread_exited;
-	mutable bool exit_thread;
+	SafeFlag active;
+	SafeFlag exit_thread;
 	bool pcm_open;
 
 	WAVEFORMATEX wave_format;
@@ -107,4 +106,4 @@ public:
 	~AudioDriverXAudio2();
 };
 
-#endif
+#endif // AUDIO_DRIVER_XAUDIO2_H

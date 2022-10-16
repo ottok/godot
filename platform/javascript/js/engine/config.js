@@ -91,6 +91,14 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 		 */
 		args: [],
 		/**
+		 * When enabled, the game canvas will automatically grab the focus when the engine starts.
+		 *
+		 * @memberof EngineConfig
+		 * @type {boolean}
+		 * @default
+		 */
+		focusCanvas: true,
+		/**
 		 * When enabled, this will turn on experimental virtual keyboard support on mobile.
 		 *
 		 * @memberof EngineConfig
@@ -98,6 +106,13 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 		 * @default
 		 */
 		experimentalVK: false,
+		/**
+		 * The progressive web app service worker to install.
+		 * @memberof EngineConfig
+		 * @default
+		 * @type {string}
+		 */
+		serviceWorker: '',
 		/**
 		 * @ignore
 		 * @type {Array.<string>}
@@ -217,6 +232,8 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 	 */
 	Config.prototype.update = function (opts) {
 		const config = opts || {};
+		// NOTE: We must explicitly pass the default, accessing it via
+		// the key will fail due to closure compiler renames.
 		function parse(key, def) {
 			if (typeof (config[key]) === 'undefined') {
 				return def;
@@ -238,6 +255,8 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 		this.persistentPaths = parse('persistentPaths', this.persistentPaths);
 		this.persistentDrops = parse('persistentDrops', this.persistentDrops);
 		this.experimentalVK = parse('experimentalVK', this.experimentalVK);
+		this.focusCanvas = parse('focusCanvas', this.focusCanvas);
+		this.serviceWorker = parse('serviceWorker', this.serviceWorker);
 		this.gdnativeLibs = parse('gdnativeLibs', this.gdnativeLibs);
 		this.fileSizes = parse('fileSizes', this.fileSizes);
 		this.args = parse('args', this.args);
@@ -315,6 +334,7 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 			locale = navigator.languages ? navigator.languages[0] : navigator.language;
 			locale = locale.split('.')[0];
 		}
+		locale = locale.replace('-', '_');
 		const onExit = this.onExit;
 
 		// Godot configuration.
@@ -324,6 +344,7 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 			'locale': locale,
 			'persistentDrops': this.persistentDrops,
 			'virtualKeyboard': this.experimentalVK,
+			'focusCanvas': this.focusCanvas,
 			'onExecute': this.onExecute,
 			'onExit': function (p_code) {
 				cleanup(); // We always need to call the cleanup callback to free memory.

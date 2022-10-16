@@ -77,6 +77,19 @@ namespace GodotTools.ProjectEditor
             if (item == null)
                 return;
 
+            // Check if the found item include already matches the new path
+            var glob = MSBuildGlob.Parse(item.Include);
+            if (glob.IsMatch(normalizedNewInclude))
+                return;
+
+            // Otherwise, if the item include uses globbing it's better to add a new item instead of modifying
+            if (!string.IsNullOrEmpty(glob.WildcardDirectoryPart) || glob.FilenamePart.Contains("*"))
+            {
+                root.AddItem(itemType, normalizedNewInclude.RelativeToPath(dir).Replace("/", "\\"));
+                root.Save();
+                return;
+            }
+
             item.Include = normalizedNewInclude.RelativeToPath(dir).Replace("/", "\\");
             root.Save();
         }
@@ -95,8 +108,22 @@ namespace GodotTools.ProjectEditor
 
             var normalizedInclude = include.NormalizePath();
 
-            if (root.RemoveItemChecked(itemType, normalizedInclude))
-                root.Save();
+            var item = root.FindItemOrNullAbs(itemType, normalizedInclude);
+
+            // Couldn't find an existing item that matches to remove
+            if (item == null)
+                return;
+
+            var glob = MSBuildGlob.Parse(item.Include);
+
+            // If the item include uses globbing don't remove it
+            if (!string.IsNullOrEmpty(glob.WildcardDirectoryPart) || glob.FilenamePart.Contains("*"))
+            {
+                return;
+            }
+
+            item.Parent.RemoveChild(item);
+            root.Save();
         }
 
         public static void RenameItemsToNewFolderInProjectChecked(string projectPath, string itemType, string oldFolder, string newFolder)
@@ -315,7 +342,7 @@ namespace GodotTools.ProjectEditor
 
             // Godot API References
 
-            var apiAssemblies = new[] {ApiAssemblyNames.Core, ApiAssemblyNames.Editor};
+            var apiAssemblies = new[] { ApiAssemblyNames.Core, ApiAssemblyNames.Editor };
 
             RemoveElements(root.ItemGroups.SelectMany(g => g.Items)
                 .Where(i => i.ItemType == "Reference" && apiAssemblies.Contains(i.Include)));

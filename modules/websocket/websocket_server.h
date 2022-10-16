@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,8 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifndef WEBSOCKET_H
-#define WEBSOCKET_H
+#ifndef WEBSOCKET_SERVER_H
+#define WEBSOCKET_SERVER_H
 
 #include "core/crypto/crypto.h"
 #include "core/reference.h"
@@ -37,7 +37,6 @@
 #include "websocket_peer.h"
 
 class WebSocketServer : public WebSocketMultiplayerPeer {
-
 	GDCLASS(WebSocketServer, WebSocketMultiplayerPeer);
 	GDCICLASS(WebSocketServer);
 
@@ -49,9 +48,11 @@ protected:
 	Ref<CryptoKey> private_key;
 	Ref<X509Certificate> ssl_cert;
 	Ref<X509Certificate> ca_chain;
+	uint32_t handshake_timeout = 3000;
 
 public:
 	virtual void poll() = 0;
+	virtual void set_extra_headers(const Vector<String> &p_headers) = 0;
 	virtual Error listen(int p_port, const Vector<String> p_protocols = Vector<String>(), bool gd_mp_api = false) = 0;
 	virtual void stop() = 0;
 	virtual bool is_listening() const = 0;
@@ -81,10 +82,13 @@ public:
 	Ref<X509Certificate> get_ca_chain() const;
 	void set_ca_chain(Ref<X509Certificate> p_ca_chain);
 
+	float get_handshake_timeout() const;
+	void set_handshake_timeout(float p_timeout);
+
 	virtual Error set_buffers(int p_in_buffer, int p_in_packets, int p_out_buffer, int p_out_packets) = 0;
 
 	WebSocketServer();
 	~WebSocketServer();
 };
 
-#endif // WEBSOCKET_H
+#endif // WEBSOCKET_SERVER_H

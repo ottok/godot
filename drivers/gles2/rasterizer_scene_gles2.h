@@ -5,8 +5,8 @@
 /*                           GODOT ENGINE                                */
 /*                      https://godotengine.org                          */
 /*************************************************************************/
-/* Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.                 */
-/* Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).   */
+/* Copyright (c) 2007-2022 Juan Linietsky, Ariel Manzur.                 */
+/* Copyright (c) 2014-2022 Godot Engine contributors (cf. AUTHORS.md).   */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
 /* a copy of this software and associated documentation files (the       */
@@ -28,8 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#ifndef RASTERIZERSCENEGLES2_H
-#define RASTERIZERSCENEGLES2_H
+#ifndef RASTERIZER_SCENE_GLES2_H
+#define RASTERIZER_SCENE_GLES2_H
 
 /* Must come before shaders or the Windows build fails... */
 #include "rasterizer_storage_gles2.h"
@@ -39,7 +39,6 @@
 #include "shaders/scene.glsl.gen.h"
 #include "shaders/tonemap.glsl.gen.h"
 /*
-
 
 #include "drivers/gles3/shaders/exposure.glsl.gen.h"
 #include "drivers/gles3/shaders/resolve.glsl.gen.h"
@@ -94,7 +93,6 @@ private:
 public:
 	RasterizerStorageGLES2 *storage;
 	struct State {
-
 		bool texscreen_copied;
 		int current_blend_mode;
 		float current_line_width;
@@ -279,6 +277,10 @@ public:
 
 	RID_Owner<ShadowAtlas> shadow_atlas_owner;
 
+	int directional_shadow_size;
+
+	void directional_shadow_create();
+
 	RID shadow_atlas_create();
 	void shadow_atlas_set_size(RID p_atlas, int p_size);
 	void shadow_atlas_set_quadrant_subdivision(RID p_atlas, int p_quadrant, int p_subdivision);
@@ -286,13 +288,13 @@ public:
 	bool shadow_atlas_update_light(RID p_atlas, RID p_light_intance, float p_coverage, uint64_t p_light_version);
 
 	struct DirectionalShadow {
-		GLuint fbo;
-		GLuint depth;
-		GLuint color;
+		GLuint fbo = 0;
+		GLuint depth = 0;
+		GLuint color = 0;
 
-		int light_count;
-		int size;
-		int current_light;
+		int light_count = 0;
+		int size = 0;
+		int current_light = 0;
 	} directional_shadow;
 
 	virtual int get_directional_light_shadow_size(RID p_light_intance);
@@ -309,7 +311,6 @@ public:
 	/* REFLECTION PROBE INSTANCE */
 
 	struct ReflectionProbeInstance : public RID_Data {
-
 		RasterizerStorageGLES2::ReflectionProbe *probe_ptr;
 		RID probe;
 		RID self;
@@ -378,6 +379,7 @@ public:
 		float glow_hdr_bleed_scale;
 		float glow_hdr_luminance_cap;
 		bool glow_bicubic_upscale;
+		bool glow_high_quality;
 
 		bool dof_blur_far_enabled;
 		float dof_blur_far_distance;
@@ -432,6 +434,7 @@ public:
 				glow_hdr_bleed_scale(2.0),
 				glow_hdr_luminance_cap(12.0),
 				glow_bicubic_upscale(false),
+				glow_high_quality(false),
 				dof_blur_far_enabled(false),
 				dof_blur_far_distance(10),
 				dof_blur_far_transition(5),
@@ -480,7 +483,7 @@ public:
 	virtual void environment_set_dof_blur_near(RID p_env, bool p_enable, float p_distance, float p_transition, float p_amount, VS::EnvironmentDOFBlurQuality p_quality);
 	virtual void environment_set_dof_blur_far(RID p_env, bool p_enable, float p_distance, float p_transition, float p_amount, VS::EnvironmentDOFBlurQuality p_quality);
 
-	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_intensity, float p_strength, float p_bloom_threshold, VS::EnvironmentGlowBlendMode p_blend_mode, float p_hdr_bleed_threshold, float p_hdr_bleed_scale, float p_hdr_luminance_cap, bool p_bicubic_upscale);
+	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_intensity, float p_strength, float p_bloom_threshold, VS::EnvironmentGlowBlendMode p_blend_mode, float p_hdr_bleed_threshold, float p_hdr_bleed_scale, float p_hdr_luminance_cap, bool p_bicubic_upscale, bool p_high_quality);
 	virtual void environment_set_fog(RID p_env, bool p_enable, float p_begin, float p_end, RID p_gradient_texture);
 
 	virtual void environment_set_ssr(RID p_env, bool p_enable, int p_max_steps, float p_fade_in, float p_fade_out, float p_depth_tolerance, bool p_roughness);
@@ -502,7 +505,6 @@ public:
 	/* LIGHT INSTANCE */
 
 	struct LightInstance : public RID_Data {
-
 		struct ShadowTransform {
 			CameraMatrix camera;
 			Transform transform;
@@ -568,7 +570,6 @@ public:
 	};
 
 	struct RenderList {
-
 		enum {
 			MAX_LIGHTS = 255,
 			MAX_REFLECTION_PROBES = 255,
@@ -653,7 +654,6 @@ public:
 		}
 
 		struct SortByDepth {
-
 			_FORCE_INLINE_ bool operator()(const Element *A, const Element *B) const {
 				return A->instance->depth < B->instance->depth;
 			}
@@ -670,7 +670,6 @@ public:
 		}
 
 		struct SortByReverseDepthAndPriority {
-
 			_FORCE_INLINE_ bool operator()(const Element *A, const Element *B) const {
 				if (A->priority == B->priority) {
 					return A->instance->depth > B->instance->depth;
@@ -693,8 +692,9 @@ public:
 		// element adding and stuff
 
 		_FORCE_INLINE_ Element *add_element() {
-			if (element_count + alpha_element_count >= max_elements)
-				return NULL;
+			if (element_count + alpha_element_count >= max_elements) {
+				return nullptr;
+			}
 
 			elements[element_count] = &base_elements[element_count];
 			return elements[element_count++];
@@ -702,7 +702,7 @@ public:
 
 		_FORCE_INLINE_ Element *add_alpha_element() {
 			if (element_count + alpha_element_count >= max_elements) {
-				return NULL;
+				return nullptr;
 			}
 
 			int idx = max_elements - alpha_element_count - 1;
@@ -743,6 +743,7 @@ public:
 	void _render_render_list(RenderList::Element **p_elements, int p_element_count,
 			const Transform &p_view_transform,
 			const CameraMatrix &p_projection,
+			const int p_eye,
 			RID p_shadow_atlas,
 			Environment *p_env,
 			GLuint p_base_env,
@@ -764,7 +765,7 @@ public:
 
 	void _post_process(Environment *env, const CameraMatrix &p_cam_projection);
 
-	virtual void render_scene(const Transform &p_cam_transform, const CameraMatrix &p_cam_projection, bool p_cam_ortogonal, InstanceBase **p_cull_result, int p_cull_count, RID *p_light_cull_result, int p_light_cull_count, RID *p_reflection_probe_cull_result, int p_reflection_probe_cull_count, RID p_environment, RID p_shadow_atlas, RID p_reflection_atlas, RID p_reflection_probe, int p_reflection_probe_pass);
+	virtual void render_scene(const Transform &p_cam_transform, const CameraMatrix &p_cam_projection, const int p_eye, bool p_cam_ortogonal, InstanceBase **p_cull_result, int p_cull_count, RID *p_light_cull_result, int p_light_cull_count, RID *p_reflection_probe_cull_result, int p_reflection_probe_cull_count, RID p_environment, RID p_shadow_atlas, RID p_reflection_atlas, RID p_reflection_probe, int p_reflection_probe_pass);
 	virtual void render_shadow(RID p_light, RID p_shadow_atlas, int p_pass, InstanceBase **p_cull_result, int p_cull_count);
 	virtual bool free(RID p_rid);
 
@@ -775,6 +776,7 @@ public:
 	void initialize();
 	void finalize();
 	RasterizerSceneGLES2();
+	~RasterizerSceneGLES2();
 };
 
-#endif // RASTERIZERSCENEGLES2_H
+#endif // RASTERIZER_SCENE_GLES2_H
