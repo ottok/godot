@@ -1,6 +1,7 @@
-godot (3.3.3-stable-1) UNRELEASED; urgency=medium
+godot (3.5.1-stable-1) UNRELEASED; urgency=medium
 
   [ Federico Ceratto ]
+  * New upstream release
   * Set supported architectures (Closes: #978567)
 
   [ Dominik George ]
@@ -9,7 +10,7 @@ godot (3.3.3-stable-1) UNRELEASED; urgency=medium
     + CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
   * Bump Standards-Version (no changes needed)
 
- -- Dominik George <natureshadow@debian.org>  Thu, 30 Sep 2021 12:48:21 +0200
+ -- Federico Ceratto <federico@debian.org>  Sun, 16 Oct 2022 12:48:08 +0100
 
 godot (3.2.3-stable-1) unstable; urgency=medium
 
