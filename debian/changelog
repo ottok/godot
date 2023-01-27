@@ -1,7 +1,7 @@
 godot (3.5.1-stable-1) unstable; urgency=medium
 
   [ Federico Ceratto ]
-  * New upstream release
+  * New upstream release (Closes: #1019931)
   * Set supported architectures (Closes: #978567)
 
   [ Dominik George ]
