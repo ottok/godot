@@ -5,7 +5,6 @@ godot (3.5.1-stable-1) unstable; urgency=medium
   * Set supported architectures (Closes: #978567)
 
   [ Dominik George ]
-  * Build godot3-dev package
   * New upstream version
     + CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
   * Bump Standards-Version (no changes needed)
