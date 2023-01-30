@@ -8,7 +8,9 @@ godot (3.5.1-stable-1) unstable; urgency=medium
   * New upstream version
     + CVE-2021-26825/CVE-2021-26826 (Closes: #982593)
   * Bump Standards-Version (no changes needed)
-  * Fix filenames in d/copyright
+  * Fixes to d/copyright
+    + Fix invalid file patterns
+    + Remove superfluous fiels (not in source tree anymore)
 
  -- Dominik George <natureshadow@debian.org>  Sat, 28 Jan 2023 23:38:55 +0100
 

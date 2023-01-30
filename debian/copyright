@@ -37,31 +37,6 @@ Comment: Godot Engine logo
 Copyright: 2014, Andrea Calabró
 License: CC-BY-3.0
 
-Files: platform/android/android_native_app_glue.c
- platform/android/android_native_app_glue.h
- platform/android/java/aidl/com/android/vending/billing/IInAppBillingService.aidl
- platform/android/java/res/layout/status_bar_ongoing_event_progress_bar.xml
- platform/android/java/src/com/android/vending/licensing/*
- platform/android/java/src/com/google/android/vending/expansion/downloader/*
- platform/android/java/src/org/godotengine/godot/input/InputManagerCompat.java
- platform/android/java/src/org/godotengine/godot/input/InputManagerV16.java
- platform/android/java/src/org/godotengine/godot/input/InputManagerV9.java
-Comment: The Android Open Source Project
-Copyright: 2008-2013, The Android Open Source Project
-License: Apache-2.0
-
-Files: platform/android/cpu-features.c
- platform/android/cpu-features.h
-Comment: The Android Open Source Project
-Copyright: 2010, The Android Open Source Project
-License: BSD-2-clause
-
-Files: platform/android/ifaddrs_android.cpp
- platform/android/ifaddrs_android.h
-Comment: The Android Open Source Project
-Copyright: 2012-2013, Google Inc.
-License: BSD-3-clause
-
 Files: platform/android/java/src/com/android/vending/licensing/util/Base64.java
  platform/android/java/src/com/android/vending/licensing/util/Base64DecoderException.java
 Comment: The Android Open Source Project
@@ -92,13 +67,7 @@ Copyright: 2007, Starbreeze Studios
   2014-2017, Godot Engine contributors.
 License: Expat and Zlib
 
-Files: thirdparty/b2d_convexdecomp/*
-Comment: Box2D (ConvexDecomp)
-Copyright: 2007, Eric Jordan
-  2006-2009, Erin Catto
-License: Zlib
-
-Files: thirdparty/fonts/DroidSans*.ttf
+Files: thirdparty/fonts/DroidSans*.woff2
 Comment: DroidSans font
 Copyright: 2008, The Android Open Source Project
 License: Apache-2.0
@@ -115,26 +84,6 @@ Copyright: 1998-2010, Gilles Vollant
   2009-2010, Mathias Svensson
 License: Zlib
 
-Files: thirdparty/misc/aes256.cpp
- thirdparty/misc/aes256.h
- thirdparty/misc/sha256.c
- thirdparty/misc/sha256.h
-Comment: AES-256 and SHA-256 implementation
-Copyright: 2007-2011, Ilya O. Levin
-License: ISC
-
-Files: thirdparty/misc/base64.c
- thirdparty/misc/base64.h
-Comment: BASE64 conversion methods
-Copyright: Ari Edelkind
-License: public-domain
-
-Files: thirdparty/misc/curl_hostcheck.c
- thirdparty/misc/curl_hostcheck.h
-Comment: curl
-Copyright: 1998-2012, Daniel Stenberg et al.
-License: curl
-
 Files: thirdparty/misc/fastlz.c
  thirdparty/misc/fastlz.h
 Comment: FastLZ
@@ -147,12 +96,6 @@ Comment: hq2x implementation
 Copyright: 2016, Bruno Ribeiro
 License: Apache-2.0
 
-Files: thirdparty/misc/md5.cpp
- thirdparty/misc/md5.h
-Comment: MD5 Message Digest Algorithm
-Copyright: 1990, RSA Data Security, Inc.
-License: RSA-MD
-
 Files: thirdparty/misc/mikktspace.c
  thirdparty/misc/mikktspace.h
 Comment: Tangent Space Normal Maps implementation
@@ -164,11 +107,6 @@ Files: thirdparty/misc/smaz.c
 Comment: SMAZ
 Copyright: 2006-2009, Salvatore Sanfilippo
 License: BSD-3-clause
-
-Files: thirdparty/misc/stb_truetype.h
-Comment: stb libraries
-Copyright: 2007-2017, Sean Barrett
-License: public-domain
 
 Files: thirdparty/misc/triangulator.cpp
  thirdparty/misc/triangulator.h
@@ -185,11 +123,6 @@ Files: thirdparty/pvrtccompressor/*
 Comment: PvrTcCompressor
 Copyright: 2014, Jeffrey Lim.
 License: BSD-3-clause
-
-Files: thirdparty/rtaudio/*
-Comment: RtAudio
-Copyright: 2001-2016, Gary P. Scavone
-License: Expat
 
 Files: thirdparty/squish/*
 Comment: libSquish
