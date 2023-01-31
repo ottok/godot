@@ -67,15 +67,66 @@ Copyright: 2007, Starbreeze Studios
   2014-2017, Godot Engine contributors.
 License: Expat and Zlib
 
+Files: thirdparty/brotli/*
+Copyright: 2013-2017, Google Inc
+           2009-2016, the Brotli Authors
+License: Expat
+
+Files: thirdparty/etc2comp/*
+Copyright: 2015, The Etc2Comp Authors
+License: Apache-2
+
 Files: thirdparty/fonts/DroidSans*.woff2
 Comment: DroidSans font
 Copyright: 2008, The Android Open Source Project
 License: Apache-2.0
 
+Files: thirdparty/glad/*
+Copyright: 2013-2020, David Herberth
+           2007-2020, The Khronos Group Inc
+License: Apache-2 or Expat
+
 Files: thirdparty/jpeg-compressor/*
 Comment: jpeg-compressor
 Copyright: 2012, Rich Geldreich
 License: public-domain
+
+Files: thirdparty/libogg/*
+Copyright: 2002, Xiph.org Foundation
+License: BSD-3-clause
+
+Files: thirdparty/libsimplewebm/libwebm/*
+Copyright: 2010, Google Inc
+License: BSD-3-clause
+
+Files: thirdparty/libtheora/*
+Copyright: 1999-2009, the Xiph.Org Foundation http://www.xiph.org
+License: BSD-3-clause
+
+Files: thirdparty/libvpx/*
+Copyright: 2010, The WebM Project authors
+License: BSD-3-clause
+
+Files: thirdparty/libwebp/*
+Copyright: 2010-2021, Google Inc
+License: BSD-3-clause
+
+Files: thirdparty/libvorbis/*
+Copyright: 1992-1994, Jutta Degener and Carsten Bormann
+License: BSD-3-clause
+
+Files: thirdparty/libvpx/*
+Copyright: 2010, The WebM Project authors
+License: BSD-3-clause
+
+Files: thirdparty/mbedtls/*
+Copyright: 2016, The Mbed TLS Contributors
+License: Apache-2
+
+Files: thirdparty/miniupnpc/*
+Copyright: 2020, Pali Rohár
+           2005-2021, Thomas Bernard
+License: BSD-3-clause
 
 Files: thirdparty/minizip/*
 Comment: MiniZip
@@ -83,6 +134,10 @@ Copyright: 1998-2010, Gilles Vollant
   2007-2008, Even Rouault
   2009-2010, Mathias Svensson
 License: Zlib
+
+Files: thirdparty/misc/clipper.*
+Copyright: 2010-2017, Angus Johnson
+License: BSL
 
 Files: thirdparty/misc/fastlz.c
  thirdparty/misc/fastlz.h
@@ -119,6 +174,18 @@ Comment: YUV2RGB
 Copyright: 2008-2011, Robin Watts
 License: BSD-2-clause
 
+Files: thirdparty/nanosvg/*
+Copyright: 2002-2004, Maxim Shemanarev (McSeem) (http://www.antigrain.com/)
+           2013-2014, Mikko Mononen <memon@inside.org>
+License: Zlib
+
+Files: thirdparty/oidn/*
+Copyright: 2008, Google Inc
+           2016-2019, Intel Corporation
+           2007, MITSUNARI Shigeo
+           2018, YANDEX LLC
+License: Apache-2
+
 Files: thirdparty/pvrtccompressor/*
 Comment: PvrTcCompressor
 Copyright: 2014, Jeffrey Lim.
@@ -128,6 +195,18 @@ Files: thirdparty/squish/*
 Comment: libSquish
 Copyright: 2006, Simon Brown
 License: Expat
+
+Files: thirdparty/zstd/*
+Copyright: Tino Reichardt, Przemyslaw Skibinski, Yann Collet, Facebook Inc
+License: BSD-3-clause
+
+Files: thirdparty/xatlas/*
+Copyright: 2012, Brandon Pelfrey
+           2004-2010, Bruno Levy
+           2006, Ignacio Castano <icastano@nvidia.com>
+           2018-2020, Jonathan Young
+           2013, Thekla, Inc
+License: BSD-3-clause or Expat
 
 License: curl
  COPYRIGHT AND PERMISSION NOTICE
