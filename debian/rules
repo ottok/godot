@@ -13,6 +13,15 @@ ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),armel riscv64))
        export DEB_LDFLAGS_MAINT_APPEND += -Wl,--no-as-needed -latomic -Wl,--as-needed
 endif
 
+# The denoise module depends on OIDN which is x86_64 only (in the
+# vendored version).
+# Godot's own logic to disable it on other arches is a bit brittle
+# when it comes to cross-compiling currently.
+# See https://github.com/godotengine/godot/issues/47344
+ifneq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 i386 armel armhf))
+       DISABLE_MODULES = module_denoise_enabled=no
+endif
+
 override_dh_clean:
 	dh_clean
 	scons -c
@@ -69,9 +78,9 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 
 override_dh_auto_build:
 	dh_auto_build
-	scons platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
-	scons platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
-	scons platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)"
+	scons platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
 
 override_dh_auto_install:
 	echo "Installing binaries for $(BITS) bits architecture"
