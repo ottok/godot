@@ -7,6 +7,7 @@ godot (3.5.1-stable-2) UNRELEASED; urgency=medium
   * Updated build dependencies based on feedback from lintian.
   * Adjusted d/copyright to list CC0 license for appstream meatadata XML file.
   * Adjusted install rules to install both appstream metadata and XSD MIME rules.
+  * Updated Standards-Version from 4.6.0 to 4.6.2.
 
  -- Petter Reinholdtsen <pere@debian.org>  Wed, 31 May 2023 16:29:31 +0200
 
