@@ -1,3 +1,15 @@
+godot (3.5.1-stable-2) UNRELEASED; urgency=medium
+
+  * Adjusted build rules to link with libatomic on armel and riscv64.
+    (Closes: #1019868)
+  * Disabled building denoise module on platforms where OIDN fail to build.
+    (Closes: #1031132)
+  * Updated build dependencies based on feedback from lintian.
+  * Adjusted d/copyright to list CC0 license for appstream meatadata XML file.
+  * Adjusted install rules to install both appstream metadata and XSD MIME rules.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 31 May 2023 16:29:31 +0200
+
 godot (3.5.1-stable-1) unstable; urgency=medium
 
   [ Federico Ceratto ]
