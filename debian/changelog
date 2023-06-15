@@ -1,11 +1,12 @@
-godot (3.5.2-stable-1) UNRELEASED; urgency=medium
+godot (3.5.2-stable-1) unstable; urgency=medium
 
   * Team upload.
 
   * Added d/gbp.conf to enforce use of pristine-tar.
   * New upstream version 3.5.2-stable.
+  * Disable modules raycast and lightmapper_cpu on s390x (Closes: #1037985).
 
- -- Petter Reinholdtsen <pere@debian.org>  Thu, 15 Jun 2023 08:26:00 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Thu, 15 Jun 2023 18:51:07 +0200
 
 godot (3.5.1-stable-2) unstable; urgency=medium
 
