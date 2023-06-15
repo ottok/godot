@@ -18,8 +18,10 @@ endif
 # Godot's own logic to disable it on other arches is a bit brittle
 # when it comes to cross-compiling currently.
 # See https://github.com/godotengine/godot/issues/47344
+# The embree library used by raycast and lightmapper_cpu modules do
+# not build on s390x, disable on archs where it is not already building.
 ifneq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 i386 armel armhf))
-       DISABLE_MODULES = module_denoise_enabled=no
+       DISABLE_MODULES = module_denoise_enabled=no module_embree_enabled=no module_raycast_enabled=no module_lightmapper_cpu_enabled=no
 endif
 
 override_dh_clean:
