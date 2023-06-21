@@ -1,3 +1,12 @@
+godot (3.5.2-stable-2) unstable; urgency=medium
+
+  * Team upload.
+
+  * Adjusted d/rules scons call to try to get the build working on
+    ppc64le.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 21 Jun 2023 16:37:46 +0200
+
 godot (3.5.2-stable-1) unstable; urgency=medium
 
   * Team upload.
