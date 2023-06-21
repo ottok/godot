@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 export DH_VERBOSE = 1
 NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+
+# Force suffix on binaries to avoid special treatment of riscv64, ppc64le, ppc64,
+# ppcle and ppc in ./platform/x11/detect.py.  Without this, the install calls below
+# fail to find the expected binaries.
 BITS = $(shell dpkg-architecture -q DEB_TARGET_ARCH_BITS)
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
@@ -26,7 +30,7 @@ endif
 
 override_dh_clean:
 	dh_clean
-	scons -c
+	scons -c arch=$(BITS)
 	find . -iname "*.gen.cpp" -delete
 	find . -iname "*.gen.h" -delete
 	find . -iname "*.pyc" -delete
@@ -80,9 +84,9 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 
 override_dh_auto_build:
 	dh_auto_build
-	scons platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
-	scons platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
-	scons platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
 
 override_dh_auto_install:
 	echo "Installing binaries for $(BITS) bits architecture"
