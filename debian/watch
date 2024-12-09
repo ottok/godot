@@ -1,2 +1,7 @@
 version=4
-opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/godot-$1\.tar\.gz/ https://github.com/godotengine/godot/tags .*/v?(\d\S*)\.tar\.gz
+opts=" \
+  repacksuffix=+ds, \
+  dversionmangle=auto \
+" \
+https://github.com/godotengine/godot/tags \
+https://github.com/godotengine/godot/archive/refs/tags/@ANY_VERSION@-stable@ARCHIVE_EXT@
