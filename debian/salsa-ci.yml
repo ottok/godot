@@ -8,4 +8,12 @@ variables:
   # SCons currently not configured properly for cross-build
   SALSA_CI_DISABLE_CROSSBUILD_ARM64: yes
   # Save CI resources when building this large package
+  # Builds already take a long time and consume lots of Salsa CI runner
   SALSA_CI_DISABLE_BUILD_PACKAGE_I386: yes
+
+# Godot is a massively big package - extend timeout to 3h so that build has more
+# time to run, and in case almost 3h isn't enough, the
+# SALSA_CI_BUILD_TIMEOUT_ARGS will kick in at 2.75h and save the ccache
+build:
+  extends: .build-package
+  timeout: 3h
