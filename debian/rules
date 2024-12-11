@@ -29,39 +29,17 @@ ifneq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 i386 armel armhf))
 endif
 
 override_dh_clean:
+	scons -c arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) $(DISABLE_MODULES)
+	scons -c arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) $(DISABLE_MODULES)
+	scons -c arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) $(DISABLE_MODULES)
 	dh_clean
-	scons -c arch=$(BITS)
-	find . -iname "*.gen.cpp" -delete
-	find . -iname "*.gen.h" -delete
-	find . -iname "*.pyc" -delete
-	find . -iname ".a" -delete
-	find . -iname ".o" -delete
-	find . -iname ".scons_env.json" -delete
-	find . -iname ".sconsign.dblite" -delete
-	find . -name '*.o' -delete
-	rm -rf .sconf_temp/
-	rm -rf main/libmain.x11.opt.tools.64.a main/tests/libtests.x11.opt.tools.64.a
-	rm -rf config.log .sconsign?.dblite
-	rm -rf bin/
-	rm -rf enet
-	rm -rf freetype
-	rm -rf libogg
-	rm -rf libpng
-	rm -rf libtheora
-	rm -rf libvorbis
-	rm -rf libvpx
-	rm -rf libwebp
-	rm -rf openssl
-	rm -rf opus
-	rm -rf pcre2
-	rm -rf squish
-	rm -rf zlib
 
 include /usr/share/dpkg/architecture.mk  # provides DEB_HOST_ARCH_BITS
 
 # bullet requires 2.88
 
 SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
+	--jobs=$(NUMJOBS) \
 	import_env_vars=CCACHE_DIR \
 	CC="$(CC)" \
 	CXX="$(CXX)" \
@@ -91,9 +69,9 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 
 override_dh_auto_build:
 	dh_auto_build
-	scons arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
-	scons arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
-	scons arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) $(DISABLE_MODULES)
 
 override_dh_auto_install:
 	echo "Installing binaries for $(BITS) bits architecture"
