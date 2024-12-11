@@ -63,6 +63,12 @@ include /usr/share/dpkg/architecture.mk  # provides DEB_HOST_ARCH_BITS
 
 SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	import_env_vars=CCACHE_DIR \
+	CC="$(CC)" \
+	CXX="$(CXX)" \
+	CCFLAGS="$(CPPFLAGS)" \
+	CFLAGS="$(CFLAGS)" \
+	CXXFLAGS="$(CXXFLAGS)" \
+	LINKFLAGS="$(LINKFLAGS)" \
 	system_certs_path=/etc/ssl/certs/ca-certificates.crt \
 	builtin_bullet=yes \
 	builtin_enet=no \
@@ -85,9 +91,9 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 
 override_dh_auto_build:
 	dh_auto_build
-	scons arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
-	scons arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
-	scons arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) CCFLAGS="$(CXXFLAGS)" LINKFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=server tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=no  target=release       $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
+	scons arch=$(BITS) platform=x11    tools=yes target=release_debug $(SCONS_OPTIONS) -j $(NUMJOBS) $(DISABLE_MODULES)
 
 override_dh_auto_install:
 	echo "Installing binaries for $(BITS) bits architecture"
