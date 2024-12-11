@@ -1,4 +1,11 @@
 ---
 include:
-  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
-  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
+  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/recipes/debian.yml
+
+variables:
+  # gbp-setup-gitattributes mangled line endings during checkout
+  SALSA_CI_DISABLE_GBP_SETUP_GITATTRIBUTES: yes
+  # SCons currently not configured properly for cross-build
+  SALSA_CI_DISABLE_CROSSBUILD_ARM64: yes
+  # Save CI resources when building this large package
+  SALSA_CI_DISABLE_BUILD_PACKAGE_I386: yes
