@@ -35,8 +35,8 @@ Build-Depends:
  zlib1g-dev,
 Standards-Version: 4.6.2
 Homepage: https://godotengine.org
-Vcs-Git: https://salsa.debian.org/debian/godot.git
-Vcs-Browser: https://salsa.debian.org/debian/godot
+Vcs-Git: https://salsa.debian.org/games-team/godot3.git
+Vcs-Browser: https://salsa.debian.org/games-team/godot3
 
 Package: godot3
 Architecture: amd64 arm64 armel armhf i386 ppc64el s390x
