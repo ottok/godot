@@ -1,5 +1,0 @@
-# The GPL code is the only in the Debian packaging
-possible-gpl-code-linked-with-openssl
-# The public domain license refers to code.google.com because the
-# project description wasn't transferred over to github.com
-obsolete-url-in-packaging
