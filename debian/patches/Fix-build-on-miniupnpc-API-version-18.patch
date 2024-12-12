@@ -1,0 +1,26 @@
+From: Travis Wrightsman <travis@wrightsman.org>
+Date: Fri, 13 Dec 2024 19:44:22 -0800
+Subject: Fix build on miniupnpc API version 18
+
+Origin: backport: https://github.com/godotengine/godot/commit/4c72d599f0a171a96e47004239f42756115b723f
+Forwarded: https://github.com/godotengine/godot/pull/100389
+---
+ modules/upnp/upnp.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/modules/upnp/upnp.cpp b/modules/upnp/upnp.cpp
+index a6e0c95..149e066 100644
+--- a/modules/upnp/upnp.cpp
++++ b/modules/upnp/upnp.cpp
+@@ -145,7 +145,11 @@ void UPNP::parse_igd(Ref<UPNPDevice> dev, UPNPDev *devlist) {
+ 	}
+ 
+ 	char addr[16];
++#if MINIUPNPC_API_VERSION >= 18
++	int i = UPNP_GetValidIGD(devlist, urls, &data, (char *)&addr, 16, nullptr, 0);
++#else
+ 	int i = UPNP_GetValidIGD(devlist, urls, &data, (char *)&addr, 16);
++#endif
+ 
+ 	if (i != 1) {
+ 		FreeUPNPUrls(urls);

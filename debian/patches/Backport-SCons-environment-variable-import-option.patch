@@ -10,7 +10,7 @@ Applied-Upstream: 4.3
  1 file changed, 7 insertions(+)
 
 diff --git a/SConstruct b/SConstruct
-index 057ec76..3136d58 100644
+index 057ec76..ca3e7ec 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -149,6 +149,7 @@ opts.Add(

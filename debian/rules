@@ -36,8 +36,10 @@ override_dh_clean:
 
 include /usr/share/dpkg/architecture.mk  # provides DEB_HOST_ARCH_BITS
 
-# bullet requires 2.88
-
+# Godot 3.x requires embree 3.x and mbedtls 2.x [0], but embree 4.x and
+# mbedtls 3.x are currently all that is available in unstable. rvo2 and
+# xatlas are not available within Debian.
+# [0] https://github.com/godotengine/godot/issues/100390
 SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	--jobs=$(NUMJOBS) \
 	import_env_vars=CCACHE_DIR \
@@ -47,8 +49,10 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	CFLAGS="$(CFLAGS)" \
 	CXXFLAGS="$(CXXFLAGS)" \
 	LINKFLAGS="$(LINKFLAGS)" \
+	builtin_bullet=no \
+	builtin_certs=no \
 	system_certs_path=/etc/ssl/certs/ca-certificates.crt \
-	builtin_bullet=yes \
+	builtin_embree=yes \
 	builtin_enet=no \
 	builtin_freetype=no \
 	builtin_libogg=no \
@@ -57,12 +61,17 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	builtin_libvorbis=no \
 	builtin_libvpx=no \
 	builtin_libwebp=no \
-	builtin_openssl=no \
+	builtin_wslay=no \
+	builtin_mbedtls=yes \
+	builtin_miniupnpc=no \
 	builtin_opus=no \
 	builtin_pcre2=no \
+	builtin_recast=no \
+	builtin_rvo2=yes \
 	builtin_squish=no \
+	builtin_xatlas=yes \
 	builtin_zlib=no \
-	builtin_zstd=yes
+	builtin_zstd=no
 
 %:
 	dh $@
