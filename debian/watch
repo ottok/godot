@@ -4,4 +4,4 @@ opts=" \
   dversionmangle=auto \
 " \
 https://github.com/godotengine/godot/tags \
-https://github.com/godotengine/godot/archive/refs/tags/@ANY_VERSION@-stable@ARCHIVE_EXT@
+https://github.com/godotengine/godot/archive/refs/tags/[-_]?v?(3\.\d[\-+\.:\~\da-zA-Z]*)-stable@ARCHIVE_EXT@
