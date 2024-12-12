@@ -17,3 +17,33 @@ variables:
 build:
   extends: .build-package
   timeout: 3h
+  variables:
+    CCACHE_TMP_DIR: ${CI_PROJECT_DIR}/../.${CI_PROJECT_NAME}.ccache
+    CCACHE_WORK_DIR: ${CI_PROJECT_DIR}/.ccache
+    DB_BUILD_PARAM: ${SALSA_CI_DPKG_BUILDPACKAGE_ARGS}
+    DB_BUILD_TYPE: full
+  # Extra customizations in order for job to timeout gracefully and job to be
+  # saved. This can be removed once
+  # https://salsa.debian.org/salsa-ci-team/pipeline/-/merge_requests/566 has
+  # been merge. Note that the after_script will also stop executing on any line
+  # that returns a non-zero exit code.
+  after_script:
+    # Print ccache stats on job log and move it to locaion that will be saved
+    - CCACHE_DIR=${CCACHE_TMP_DIR} ccache -s
+    - mv -v ${CCACHE_TMP_DIR} ${CCACHE_WORK_DIR}
+    # Restore PWD to ${WORKING_DIR}
+    - cd ${WORKING_DIR}
+    # Clean away sources from artifact directory
+    - rm -rf ${WORKING_DIR}/${SOURCE_DIR}
+    # Print size of artifacts after build
+    - du -sh
+    # Warn if job artifacts size limit exceeded
+    - |
+      if [ "$(du -s | cut -f1)" -gt ${SALSA_CI_MAX_ARTIFACTS_SIZE} ]; then
+      echo -e "\e[91m WARNING: job artifacts exceed the size limit of $(( ${SALSA_CI_MAX_ARTIFACTS_SIZE} / 1024 ))MB which may prevent the job to succeed.\e[39m"
+      fi
+  cache:
+    when: always
+    key: "build-${BUILD_ARCH}_${HOST_ARCH}"
+    paths:
+      - .ccache
