@@ -65,10 +65,3 @@ Depends:
 Description: Headless Godot game engine run-time
  Godot is an advanced, feature packed, multi-platform 2D and 3D game engine.
  This package provides a command-line only version of the program.
-
-#Package: godot3-dev
-#Architecture: all
-#Depends: ${misc:Depends}, godot3 (>= ${source:Version})
-#Description: Godot game engine - Development headers
-# Godot is an advanced, feature packed, multi-platform 2D and 3D game engine.
-# This package contains development headers for modules.
