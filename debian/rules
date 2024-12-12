@@ -71,7 +71,8 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	builtin_squish=no \
 	builtin_xatlas=yes \
 	builtin_zlib=no \
-	builtin_zstd=no
+	builtin_zstd=no \
+	verbose=yes
 
 %:
 	dh $@
