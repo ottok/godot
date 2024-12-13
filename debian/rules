@@ -48,7 +48,7 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	CCFLAGS="$(CPPFLAGS)" \
 	CFLAGS="$(CFLAGS)" \
 	CXXFLAGS="$(CXXFLAGS)" \
-	LINKFLAGS="$(LINKFLAGS)" \
+	LINKFLAGS="$(LDFLAGS)" \
 	builtin_bullet=no \
 	builtin_certs=no \
 	system_certs_path=/etc/ssl/certs/ca-certificates.crt \
