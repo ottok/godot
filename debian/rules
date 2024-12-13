@@ -93,10 +93,13 @@ override_dh_auto_install:
 	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.tools.$(BITS) $(CURDIR)/debian/godot3/usr/bin/godot3
 	install -D -m 400 $(CURDIR)/bin/godot.x11.opt.$(BITS) $(CURDIR)/debian/godot3-runner/usr/bin/godot3-runner
 	install -D -m 400 $(CURDIR)/bin/godot_server.x11.opt.tools.$(BITS) $(CURDIR)/debian/godot3-server/usr/bin/godot3-server
-	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.desktop $(CURDIR)/debian/godot3/usr/share/applications/org.godotengine.Godot.desktop
-	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.appdata.xml $(CURDIR)/debian/godot3/usr/share/metainfo/org.godotengine.Godot.metainfo.xml
-	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.xml $(CURDIR)/debian/godot3/usr/share/mime/packages/org.godotengine.Godot.xml
-	install -D -m 644 $(CURDIR)/icon.svg $(CURDIR)/debian/godot3/usr/share/icons/hicolor/scalable/apps/godot.svg
+	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.desktop $(CURDIR)/debian/godot3/usr/share/applications/org.godotengine.Godot3.desktop
+	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.appdata.xml $(CURDIR)/debian/godot3/usr/share/metainfo/org.godotengine.Godot3.metainfo.xml
+	install -D -m 444 $(CURDIR)/misc/dist/linux/org.godotengine.Godot.xml $(CURDIR)/debian/godot3/usr/share/mime/packages/org.godotengine.Godot3.xml
+	install -D -m 644 $(CURDIR)/icon.svg $(CURDIR)/debian/godot3/usr/share/icons/hicolor/scalable/apps/godot3.svg
 	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.6 $(CURDIR)/debian/godot3/usr/share/man/man6/godot3.6
-	sed -i 's/^Exec=.*/Exec=godot3 -p %f/' $(CURDIR)/debian/godot3/usr/share/applications/org.godotengine.Godot.desktop
+	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.6 $(CURDIR)/debian/godot3-runner/usr/share/man/man6/godot3-runner.6
+	sed -i 's/godot3/godot3-runner/' $(CURDIR)/debian/godot3-runner/usr/share/man/man6/godot3-runner.6
+	install -D -m 444 $(CURDIR)/misc/dist/linux/godot.6 $(CURDIR)/debian/godot3-server/usr/share/man/man6/godot3-server.6
+	sed -i 's/godot3/godot3-server/' $(CURDIR)/debian/godot3-server/usr/share/man/man6/godot3-server.6
 	dh_auto_install

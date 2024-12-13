@@ -1,3 +1,4 @@
 Backport-SCons-environment-variable-import-option.patch
 Fix-build-on-miniupnpc-API-version-18.patch
 Fix-wslay-and-recast-compiler-flags.patch
+Namespace-metadata-to-major-version.patch

@@ -1,0 +1,83 @@
+From: Travis Wrightsman <travis@wrightsman.org>
+Date: Thu, 12 Dec 2024 20:15:09 -0800
+Subject: Namespace metadata to major version
+
+---
+ misc/dist/linux/godot.6                           | 12 ++++--------
+ misc/dist/linux/org.godotengine.Godot.appdata.xml |  6 +++---
+ misc/dist/linux/org.godotengine.Godot.desktop     |  6 +++---
+ 3 files changed, 10 insertions(+), 14 deletions(-)
+
+diff --git a/misc/dist/linux/godot.6 b/misc/dist/linux/godot.6
+index 80dcfc8..4e566a6 100644
+--- a/misc/dist/linux/godot.6
++++ b/misc/dist/linux/godot.6
+@@ -1,8 +1,8 @@
+-.TH GODOT "6" "January 2020" "godot 3.2" "Games"
++.TH GODOT3 "6" "January 2020" "godot 3.2" "Games"
+ .SH NAME
+ godot \- multi\-platform 2D and 3D game engine with a feature\-rich editor
+ .SH SYNOPSIS
+-.B godot
++.B godot3
+ [\fI\,options\/\fR] [path to scene or 'project.godot' file]
+ .SH DESCRIPTION
+ Godot Engine is an advanced, feature\-packed, multi\-platform 2D and 3D game
+@@ -174,13 +174,9 @@ XDG_DATA_CACHE/godot/ or ~/.cache/godot/
+ .RS
+ Cache folder for generated thumbnails and scene previews, as well as temporary location for downloads.
+ .RE
+-/usr/share/doc/godot/
++/usr/share/doc/godot3/
+ .RS
+-Additional documentation files.
+-.RE
+-/usr/share/licenses/godot/
+-.RS
+-Detailed licensing information.
++Additional documentation files and detailed licensing information.
+ .RE
+ .SH "SEE ALSO"
+ See the project website at \fIhttps://godotengine.org\fR and the source
+diff --git a/misc/dist/linux/org.godotengine.Godot.appdata.xml b/misc/dist/linux/org.godotengine.Godot.appdata.xml
+index af647bc..56fe71e 100644
+--- a/misc/dist/linux/org.godotengine.Godot.appdata.xml
++++ b/misc/dist/linux/org.godotengine.Godot.appdata.xml
+@@ -1,12 +1,12 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!-- Copyright 2017-2022 Rémi Verschelde <remi@godotengine.org> -->
+ <component type="desktop">
+-  <id>org.godotengine.Godot</id>
++  <id>org.godotengine.Godot3</id>
+   <metadata_license>CC0-1.0</metadata_license>
+   <project_license>MIT</project_license>
+-  <name>Godot Engine</name>
++  <name>Godot Engine 3</name>
+   <summary>Multi-platform 2D and 3D game engine with a feature-rich editor</summary>
+-  ​<launchable type="desktop-id">org.godotengine.Godot.desktop</launchable>
++  ​<launchable type="desktop-id">org.godotengine.Godot3.desktop</launchable>
+   <description>
+     <p>
+       Godot is an advanced, feature-packed, multi-platform 2D and 3D game
+diff --git a/misc/dist/linux/org.godotengine.Godot.desktop b/misc/dist/linux/org.godotengine.Godot.desktop
+index db0c80e..ec9017b 100644
+--- a/misc/dist/linux/org.godotengine.Godot.desktop
++++ b/misc/dist/linux/org.godotengine.Godot.desktop
+@@ -1,5 +1,5 @@
+ [Desktop Entry]
+-Name=Godot Engine
++Name=Godot Engine 3
+ GenericName=Libre game engine
+ GenericName[el]=Ελεύθερη μηχανή παιχνιδιού
+ GenericName[fr]=Moteur de jeu libre
+@@ -8,8 +8,8 @@ Comment=Multi-platform 2D and 3D game engine with a feature-rich editor
+ Comment[el]=2D και 3D μηχανή παιχνιδιού πολλαπλών πλατφορμών με επεξεργαστή πλούσιο σε χαρακτηριστικά
+ Comment[fr]=Moteur de jeu 2D et 3D multiplateforme avec un éditeur riche en fonctionnalités
+ Comment[zh_CN]=多平台 2D 和 3D 游戏引擎，带有功能丰富的编辑器
+-Exec=godot %f
+-Icon=godot
++Exec=godot3 --project-manager %f
++Icon=godot3
+ Terminal=false
+ PrefersNonDefaultGPU=true
+ Type=Application
