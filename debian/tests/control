@@ -1,0 +1,11 @@
+Tests: editor
+Depends:
+ godot3,
+ xauth,
+ xvfb,
+Restrictions: allow-stderr, flaky
+
+Tests: server
+Depends:
+ godot3-server,
+Restrictions: allow-stderr

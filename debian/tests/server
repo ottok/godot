@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -eu
+
+# avoid writing in home directory during test
+# See Debian Bug #986665
+export HOME="${AUTOPKGTEST_TMP}/home" \
+export XDG_CONFIG_HOME="${AUTOPKGTEST_TMP}/config" \
+export XDG_DATA_HOME="${AUTOPKGTEST_TMP}/data" \
+export XDG_CACHE_HOME="${AUTOPKGTEST_TMP}/cache" \
+
+# test names extracted from main/tests/test_main.cpp
+# skip "physics", "physics_2d", "render", and "gui" as they seem to hang and/or
+#   use a lot of resources
+# skip "gd_*" as they require a GDScript file as input
+for test_name in string math basis transform oa_hash_map shaderlang crypto ordered_hash_map astar xml_parser theme
+do
+  echo "Running test: ${test_name}"
+  godot3-server --test $test_name
+done
