@@ -10,6 +10,17 @@ variables:
   # Save CI resources when building this large package
   # Builds already take a long time and consume lots of Salsa CI runner
   SALSA_CI_DISABLE_BUILD_PACKAGE_I386: yes
+  # Disable the failing BLHC as unnecessary for the tiem being. The build log is
+  # very long, yet not verbose enough for BLHC to analyze it, so running BLHC is
+  # useless in current form. Additionally, the hardening flags were already
+  # recently fixed as proven in
+  # https://salsa.debian.org/games-team/godot3/-/merge_requests/5
+  SALSA_CI_DISABLE_BLHC: 1
+  # Disable reprotest that is timing out. It should be investigated and
+  # re-enabled later, but it is not a high priority compared to other pacakage
+  # maintenance tasks, and anyway reprotest for such a huge package a massive
+  # resource hog, and we may decide to not run it on the pipeline at all.
+  SALSA_CI_DISABLE_REPROTEST: 1
 
 # Godot is a massively big package - extend timeout to 3h so that build has more
 # time to run, and in case almost 3h isn't enough, the
