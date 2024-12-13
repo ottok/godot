@@ -72,6 +72,7 @@ SCONS_OPTIONS = bits=$(DEB_HOST_ARCH_BITS) \
 	builtin_xatlas=yes \
 	builtin_zlib=no \
 	builtin_zstd=no \
+	use_static_cpp=no \
 	verbose=yes
 
 %:
