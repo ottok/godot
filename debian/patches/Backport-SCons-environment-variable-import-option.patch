@@ -10,18 +10,18 @@ Applied-Upstream: 4.3
  1 file changed, 7 insertions(+)
 
 diff --git a/SConstruct b/SConstruct
-index 057ec76..ca3e7ec 100644
+index d0ffcde..7a16cd0 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -149,6 +149,7 @@ opts.Add(
+@@ -152,6 +152,7 @@ opts.Add(
          False,
      )
  )
 +opts.Add("import_env_vars", "A comma-separated list of environment variables to copy from the outer environment.", "")
  opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
  opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
- opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", True))
-@@ -201,6 +202,12 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
+ opts.Add(BoolVariable("modules_enabled_by_default", "If no, disable all modules except ones explicitly enabled", True))
+@@ -206,6 +207,12 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
  # in following code (especially platform and custom_modules).
  opts.Update(env_base)
  

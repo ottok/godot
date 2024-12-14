@@ -8,10 +8,10 @@ Subject: Fix wslay and recast compiler flags
  2 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/platform/server/detect.py b/platform/server/detect.py
-index 98ecb77..22c5c8b 100644
+index 7bd5a0f..419e81c 100644
 --- a/platform/server/detect.py
 +++ b/platform/server/detect.py
-@@ -216,8 +216,14 @@ def configure(env):
+@@ -259,8 +259,14 @@ def configure(env):
          # mbedTLS does not provide a pkgconfig config yet. See https://github.com/ARMmbed/mbedtls/issues/228
          env.Append(LIBS=["mbedtls", "mbedcrypto", "mbedx509"])
  
@@ -28,10 +28,10 @@ index 98ecb77..22c5c8b 100644
      if not env["builtin_miniupnpc"]:
          # No pkgconfig file so far, hardcode default paths.
 diff --git a/platform/x11/detect.py b/platform/x11/detect.py
-index 8b48f7f..2d08950 100644
+index 6390c26..fd9d90c 100644
 --- a/platform/x11/detect.py
 +++ b/platform/x11/detect.py
-@@ -336,8 +336,14 @@ def configure(env):
+@@ -344,8 +344,14 @@ def configure(env):
          # mbedTLS does not provide a pkgconfig config yet. See https://github.com/ARMmbed/mbedtls/issues/228
          env.Append(LIBS=["mbedtls", "mbedcrypto", "mbedx509"])
  
