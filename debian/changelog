@@ -1,3 +1,21 @@
+godot (3.6+ds-1) UNRELEASED; urgency=medium
+
+  [ Travis Wrightsman ]
+  * New upstream version 3.6+ds
+  * Add autopkgtests
+  * Update VCS URLs after rename
+  * Migrate metainfo and icon to modern freedesktop paths
+  * Install godot3 man page
+  * Unvendor as many dependencies as currently possible
+  * Replace custom_build suffix with Debian version
+  * Namespace everything to major version 3
+
+  [ Otto Kekäläinen ]
+  * Salsa CI: Use longer timeout and properly save ccache on failure
+  * Salsa CI: Intentionally disable BLHC and reprotest as unnecessary for now
+
+ -- Travis Wrightsman <travis@wrightsman.org>  Fri, 13 Dec 2024 20:14:40 -0800
+
 godot (3.5.2-stable-2) unstable; urgency=medium
 
   * Team upload.
