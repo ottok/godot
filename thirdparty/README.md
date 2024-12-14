@@ -8,19 +8,20 @@ readability.
 ## brotli
 
 - Upstream: https://github.com/google/brotli
-- Version: git (f4153a09f87cbb9c826d8fc12c74642bb2d879ea, 2022)
+- Version: 1.1.0 (ed738e842d2fbdf2d6459e39267a633c4a9b2f5d, 2023)
 - License: MIT
 
 Files extracted from upstream source:
 
-- `common/`, `dec/` and `include/` folders
+- `common/`, `dec/` and `include/` folders from `c/`,
+  minus the `dictionary.bin*` files
 - `LICENSE`
 
 
 ## bullet
 
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: 3.24 (7dee3436e747958e7088dfdcea0e4ae031ce619e, 2022)
+- Version: 3.25 (2c204c49e56ed15ec5fcfa71d199ab6d6570b3f5, 2022)
 - License: zlib
 
 Files extracted from upstream source:
@@ -29,13 +30,11 @@ Files extracted from upstream source:
   and CMakeLists.txt and premake4.lua files
 - `LICENSE.txt`, and `VERSION` as `VERSION.txt`
 
-Includes some patches in the `patches` folder which have been sent upstream.
-
 
 ## certs
 
 - Upstream: Mozilla, via https://github.com/bagder/ca-bundle
-- Version: git (b2f7415648411b6fd7c298c6c92d6552f0165f60, 2022)
+- Version: git (c5a419971b1bec220368c619aaafd0b818aa119f, 2024)
 - License: MPL 2.0
 
 
@@ -53,7 +52,7 @@ Files extracted from upstream source:
 ## embree
 
 - Upstream: https://github.com/embree/embree
-- Version: 3.13.0 (7c53133eb21424f7f0ae1e25bf357e358feaf6ab, 2021)
+- Version: 3.13.5 (698442324ccddd11725fb8875275dc1384f7fb40, 2022)
 - License: Apache 2.0
 
 Files extracted from upstream:
@@ -72,8 +71,8 @@ commits.
 
 ## enet
 
-- Upstream: http://enet.bespin.org
-- Version: 1.3.17 (e0e7045b7e056b454b5093cb34df49dc4cee0bee, 2020)
+- Upstream: https://github.com/lsalzman/enet
+- Version: git (c44b7d0f7ff21edb702745e4c019d0537928c373, 2024)
 - License: MIT
 
 Files extracted from upstream source:
@@ -187,14 +186,14 @@ Files extracted from upstream source:
 ## libpng
 
 - Upstream: http://libpng.org/pub/png/libpng.html
-- Version: 1.6.38 (0a158f3506502dfa23edfc42790dfaed82efba17, 2022)
+- Version: 1.6.43 (ed217e3e601d8e462f7fd1e04bed43ac42212429, 2024)
 - License: libpng/zlib
 
 Files extracted from upstream source:
 
-- all .c and .h files of the main directory, except from
-  `example.c` and `pngtest.c`
-- the arm/ folder
+- All `.c` and `.h` files of the main directory, apart from `example.c` and
+  `pngtest.c`
+- The `arm/` folder
 - `scripts/pnglibconf.h.prebuilt` as `pnglibconf.h`
 - `LICENSE`
 
@@ -267,7 +266,7 @@ from the Android NDK r18.
 ## libwebp
 
 - Upstream: https://chromium.googlesource.com/webm/libwebp/
-- Version: 1.2.4 (0d1f12546bd803099a60c070517a552483f3790e, 2022)
+- Version: 1.3.2 (ca332209cb5567c9b249c86788cb2dbf8847e760, 2023)
 - License: BSD-3-Clause
 
 Files extracted from upstream source:
@@ -279,17 +278,18 @@ Files extracted from upstream source:
 ## mbedtls
 
 - Upstream: https://github.com/Mbed-TLS/mbedtls
-- Version: 2.18.2 (89f040a5c938985c5f30728baed21e49d0846a53, 2022)
+- Version: 2.28.8 (5a764e5555c64337ed17444410269ff21cb617b1, 2024)
 - License: Apache 2.0
 
 File extracted from upstream release tarball:
 
-- All `*.h` from `include/mbedtls/` to `thirdparty/mbedtls/include/mbedtls/` except `config_psa.h` and `psa_util.h`.
-- All `*.c` and `*.h` from `library/` to `thirdparty/mbedtls/library/` except those starting with `psa_*`.
-- The `LICENSE` file.
-- Applied the patch in `patches/1453.diff` (upstream PR:
-  https://github.com/ARMmbed/mbedtls/pull/1453).
-  Applied the patch in `patches/windows-arm64-hardclock.diff`
+- All `.h` from `include/mbedtls/` to `thirdparty/mbedtls/include/mbedtls/`
+  except `config_psa.h` and `psa_util.h`
+- All `.c` and `.h` from `library/` to `thirdparty/mbedtls/library/` except
+  those starting with `psa_*`
+- The `LICENSE` file (edited to keep only the Apache 2.0 variant)
+- Applied the patch `windows-arm64-hardclock.diff` to fix Windows ARM64 build
+  Applied the patch `windows-entropy-bcrypt.diff` to fix Windows Store support
 - Added 2 files `godot_core_mbedtls_platform.c` and `godot_core_mbedtls_config.h`
   providing configuration for light bundling with core.
 
@@ -310,14 +310,14 @@ Files extracted from upstream repository:
 ## miniupnpc
 
 - Upstream: https://github.com/miniupnp/miniupnp
-- Version: 2.2.4 (7d1d8bc3868b08ad003bad235eee57562b95b76d, 2022)
+- Version: 2.2.7 (d4d5ec7d48c093b37b2ea5d7171ede21ce9d7ff2, 2024)
 - License: BSD-3-Clause
 
 Files extracted from upstream source:
 
 - Copy `miniupnpc/src` and `miniupnpc/include` to `thirdparty/miniupnpc`
 - Remove the following test or sample files:
-  `listdevices.c minihttptestserver.c miniupnpcmodule.c upnpc.c upnperrors.* test*`
+  `listdevices.c,minihttptestserver.c,miniupnpcmodule.c,upnpc.c,upnperrors.*,test*`
 - `LICENSE`
 
 The only modified file is `src/miniupnpcstrings.h`, which was created for Godot
@@ -328,7 +328,7 @@ that file when upgrading.
 ## minizip
 
 - Upstream: https://www.zlib.net
-- Version: 1.2.13 (zlib contrib, 2022)
+- Version: 1.3.1 (zlib contrib, 2024)
 - License: zlib
 
 Files extracted from the upstream source:
@@ -400,7 +400,7 @@ Collection of single-file libraries used in Godot components.
 ## nanosvg
 
 - Upstream: https://github.com/memononen/nanosvg
-- Version: git (f0a3e1034dd22e2e87e5db22401e44998383124e, 2022)
+- Version: git (93ce879dc4c04a3ef1758428ec80083c38610b1f, 2023)
 - License: zlib
 
 Files extracted from the upstream source:
@@ -463,7 +463,7 @@ Files extracted from upstream source:
 ## pcre2
 
 - Upstream: http://www.pcre.org
-- Version: 10.40 (3103b8f20a3b9944b177e812fde29fbfb8b90558, 2022)
+- Version: 10.42 (52c08847921a324c804cabf2814549f50bce1265, 2022)
 - License: BSD-3-Clause
 
 Files extracted from upstream source:
@@ -495,7 +495,7 @@ Files extracted from upstream source:
 ## recastnavigation
 
 - Upstream: https://github.com/recastnavigation/recastnavigation
-- Version: git (4fef0446609b23d6ac180ed822817571525528a1, 2022)
+- Version: 1.6.0 (6dc1667f580357e8a2154c28b7867bea7e8ad3a7, 2023)
 - License: zlib
 
 Files extracted from upstream source:
@@ -538,7 +538,7 @@ comments and a patch is provided in the squish/ folder.
 ## tinyexr
 
 - Upstream: https://github.com/syoyo/tinyexr
-- Version: 1.0.1 (67010eae802211202d0797f4df2b809f4ba7442c, 2021)
+- Version: 1.0.8 (6c8742cc8145c8f629698cd8248900990946d6b1, 2024)
 - License: BSD-3-Clause
 
 Files extracted from upstream source:
@@ -569,7 +569,7 @@ folder.
 ## wslay
 
 - Upstream: https://github.com/tatsuhiro-t/wslay
-- Version: 1.1.1+git (45d22583b488f79d5a4e598cc7675c191c5ab53f, 2021)
+- Version: 1.1.1+git (0e7d106ff89ad6638090fd811a9b2e4c5dda8d40, 2022)
 - License: MIT
 
 File extracted from upstream release tarball:
@@ -586,7 +586,7 @@ File extracted from upstream release tarball:
 ## xatlas
 
 - Upstream: https://github.com/jpcy/xatlas
-- Version: git (16ace528acd2cf1f16a7c0dde99c42c486488dbe, 2022)
+- Version: git (f700c7790aaa030e794b52ba7791a05c085faf0c, 2022)
 - License: MIT
 
 Files extracted from upstream source:
@@ -598,19 +598,19 @@ Files extracted from upstream source:
 ## zlib
 
 - Upstream: https://www.zlib.net
-- Version: 1.2.13 (2022)
+- Version: 1.3.1 (2024)
 - License: zlib
 
 Files extracted from upstream source:
 
-- All `*.c` and `*.h` files
+- All `*.c` and `*.h` files, minus `infback.c`
 - `LICENSE`
 
 
 ## zstd
 
 - Upstream: https://github.com/facebook/zstd
-- Version: 1.5.0 (a488ba114ec17ea1054b9057c26a046fc122b3b6, 2021)
+- Version: 1.5.5 (63779c798237346c2b245c546c40b72a5a5913fe, 2023)
 - License: BSD-3-Clause
 
 Files extracted from upstream source:
