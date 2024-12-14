@@ -169,6 +169,9 @@ String ScriptCreateDialog::_validate_path(const String &p_path, bool p_file_must
 	if (p.get_file().get_basename() == "") {
 		return TTR("Filename is empty.");
 	}
+	if (p.get_file().begins_with(".")) {
+		return TTR("Name begins with a dot.");
+	}
 
 	p = ProjectSettings::get_singleton()->localize_path(p);
 	if (!p.begins_with("res://")) {
@@ -204,18 +207,14 @@ String ScriptCreateDialog::_validate_path(const String &p_path, bool p_file_must
 
 	bool found = false;
 	bool match = false;
-	int index = 0;
 	for (List<String>::Element *E = extensions.front(); E; E = E->next()) {
 		if (E->get().nocasecmp_to(extension) == 0) {
-			//FIXME (?) - changing language this way doesn't update controls, needs rework
-			//language_menu->select(index); // change Language option by extension
 			found = true;
 			if (E->get() == ScriptServer::get_language(language_menu->get_selected())->get_extension()) {
 				match = true;
 			}
 			break;
 		}
-		index++;
 	}
 
 	if (!found) {

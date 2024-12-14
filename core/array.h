@@ -60,6 +60,7 @@ public:
 	bool operator==(const Array &p_array) const;
 
 	uint32_t hash() const;
+	uint32_t recursive_hash(int p_recursion_count) const;
 	void operator=(const Array &p_array);
 
 	void push_back(const Variant &p_value);
@@ -72,6 +73,7 @@ public:
 	void fill(const Variant &p_value);
 
 	Variant front() const;
+	Variant pick_random() const;
 	Variant back() const;
 
 	Array &sort();
