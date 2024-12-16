@@ -2,6 +2,10 @@ From: Travis Wrightsman <travis@wrightsman.org>
 Date: Thu, 12 Dec 2024 20:15:09 -0800
 Subject: Namespace metadata to major version
 
+Debian-specific namespacing to major version to allow Godot 3.x and 4.x editors
+to be co-installed.
+
+Forwarded: not-needed
 ---
  misc/dist/linux/godot.6                           | 12 ++++--------
  misc/dist/linux/org.godotengine.Godot.appdata.xml |  6 +++---
