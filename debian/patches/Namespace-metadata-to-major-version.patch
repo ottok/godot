@@ -5,8 +5,8 @@ Subject: Namespace metadata to major version
 ---
  misc/dist/linux/godot.6                           | 12 ++++--------
  misc/dist/linux/org.godotengine.Godot.appdata.xml |  6 +++---
- misc/dist/linux/org.godotengine.Godot.desktop     |  6 +++---
- 3 files changed, 10 insertions(+), 14 deletions(-)
+ misc/dist/linux/org.godotengine.Godot.desktop     |  8 ++++----
+ 3 files changed, 11 insertions(+), 15 deletions(-)
 
 diff --git a/misc/dist/linux/godot.6 b/misc/dist/linux/godot.6
 index 80dcfc8..4e566a6 100644
@@ -60,7 +60,7 @@ index af647bc..56fe71e 100644
      <p>
        Godot is an advanced, feature-packed, multi-platform 2D and 3D game
 diff --git a/misc/dist/linux/org.godotengine.Godot.desktop b/misc/dist/linux/org.godotengine.Godot.desktop
-index db0c80e..ec9017b 100644
+index db0c80e..7fad53d 100644
 --- a/misc/dist/linux/org.godotengine.Godot.desktop
 +++ b/misc/dist/linux/org.godotengine.Godot.desktop
 @@ -1,5 +1,5 @@
@@ -70,7 +70,7 @@ index db0c80e..ec9017b 100644
  GenericName=Libre game engine
  GenericName[el]=Ελεύθερη μηχανή παιχνιδιού
  GenericName[fr]=Moteur de jeu libre
-@@ -8,8 +8,8 @@ Comment=Multi-platform 2D and 3D game engine with a feature-rich editor
+@@ -8,11 +8,11 @@ Comment=Multi-platform 2D and 3D game engine with a feature-rich editor
  Comment[el]=2D και 3D μηχανή παιχνιδιού πολλαπλών πλατφορμών με επεξεργαστή πλούσιο σε χαρακτηριστικά
  Comment[fr]=Moteur de jeu 2D et 3D multiplateforme avec un éditeur riche en fonctionnalités
  Comment[zh_CN]=多平台 2D 和 3D 游戏引擎，带有功能丰富的编辑器
@@ -81,3 +81,7 @@ index db0c80e..ec9017b 100644
  Terminal=false
  PrefersNonDefaultGPU=true
  Type=Application
+ MimeType=application/x-godot-project;
+ Categories=Development;IDE;
+-StartupWMClass=Godot
++StartupWMClass=Godot3
