@@ -1,20 +1,22 @@
-godot (3.6+ds-1) UNRELEASED; urgency=medium
+godot (3.6+ds-1) unstable; urgency=medium
 
   [ Travis Wrightsman ]
-  * New upstream version 3.6+ds
+  * New upstream version 3.6+ds (Closes: #1070845)
   * Add autopkgtests
-  * Update VCS URLs after rename
   * Migrate metainfo and icon to modern freedesktop paths
   * Install godot3 man page
   * Unvendor as many dependencies as currently possible
   * Replace custom_build suffix with Debian version
   * Namespace everything to major version 3
+  * Namespace StartupWMClass to major version too
+  * Add myself to d/copyright
+  * Update VCS URL salsa.debian.org/games-team/godot3
 
   [ Otto Kekäläinen ]
-  * Salsa CI: Use longer timeout and properly save ccache on failure
-  * Salsa CI: Intentionally disable BLHC and reprotest as unnecessary for now
+  * Enable Salsa CI to improve quality assurance prior to upload
+  * Add myself to copyright and uploader while sponsoring Travis' work
 
- -- Travis Wrightsman <travis@wrightsman.org>  Fri, 13 Dec 2024 20:14:40 -0800
+ -- Otto Kekäläinen <otto@debian.org>  Mon, 16 Dec 2024 16:13:02 -0800
 
 godot (3.5.2-stable-2) unstable; urgency=medium
 

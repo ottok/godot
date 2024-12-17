@@ -14,6 +14,7 @@ Files: debian/*
 Copyright: 2017 Kienan Stewart <kienan.stewart@burntworld.ca>
            2018 Federico Ceratto <federico@debian.org>
            2024 Travis Wrightsman <travis@wrightsman.org>
+           2024 Otto Kekäläinen <otto@debian.org>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

@@ -3,6 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
 Uploaders:
+ Otto Kekäläinen <otto@debian.org>,
  Travis Wrightsman <travis@wrightsman.org>,
  Federico Ceratto <federico@debian.org>,
  Dominik George <natureshadow@debian.org>,
