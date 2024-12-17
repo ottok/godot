@@ -1,7 +1,7 @@
 godot (3.6+ds-1) unstable; urgency=medium
 
   [ Travis Wrightsman ]
-  * New upstream version 3.6+ds (Closes: #1070845)
+  * New upstream version 3.6+ds (Related: #1070845)
   * Add autopkgtests
   * Migrate metainfo and icon to modern freedesktop paths
   * Install godot3 man page
